@@ -110,7 +110,6 @@
                     value="{{ form.last_name_kana }}"
                   {% endif %}
                   autocomplete="last-name-kana"
-                  autocomplete="family-name"
                   required
                   class="{% if form.errors contains 'last_name_kana' %}form__box__error{% endif %}"
           >
@@ -145,7 +144,6 @@
                   value="{{ form.company_name }}"
                 {% endif %}
                 autocomplete="company_name"
-                class="{% if form.errors contains 'company_name' %}form__box__error{% endif %}"
         >
       </fieldset>
 
@@ -156,11 +154,7 @@
                 type="text"
                 name="customer[note][company_name_kana]"
                 id="RegisterForm-CompanyNameKana"
-                {% if form.company_name_kana %}
-                  value="{{ form.company_name_kana }}"
-                {% endif %}
                 autocomplete="company_name_kana"
-                class="{% if form.errors contains 'company_name_kana' %}form__box__error{% endif %}"
         >
       </fieldset>
 
@@ -171,11 +165,7 @@
                 type="text"
                 name="customer[note][department_name]"
                 id="RegisterForm-DepartmentName"
-                {% if form.department_name %}
-                  value="{{ form.department_name }}"
-                {% endif %}
                 autocomplete="department_name"
-                class="{% if form.errors contains 'department_name' %}form__box__error{% endif %}"
         >
       </fieldset>
 
@@ -186,19 +176,8 @@
                 type="text"
                 name="customer[note][post_name]"
                 id="RegisterForm-PostName"
-                {% if form.post_name %}
-                  value="{{ form.post_name }}"
-                {% endif %}
                 autocomplete="post_name"
-                {% if form.errors contains 'post_name' %}
-                  aria-invalid="true"
-                  aria-describedby="RegisterForm-post_name-error"
-                {% endif %}
-                class="{% if form.errors contains 'post_name' %}form__box__error{% endif %}"
         >
-        {% if form.errors contains 'post_name' %}
-          <p class="form__box__errortext" id="RegisterForm-post_name-error">「{{ ja__post_name }}」を入力してください。</p>
-        {% endif %}
       </fieldset>
 
       {% comment %} 郵便番号 {% endcomment %}
@@ -240,10 +219,6 @@
           <select
                   name="customer[note][prefecture]"
                   id="RegisterForm-Prefecture"
-                  {% if form.errors contains 'prefecture' %}
-                    aria-invalid="true"
-                    aria-describedby="RegisterForm-prefecture-error"
-                  {% endif %}
                   class="p-region  {% if form.errors contains 'prefecture' %}form__box__error{% endif %}"
           >
             <option value="" selected>選択してください</option>
@@ -383,10 +358,6 @@
                     value="{{ form.customer_fax1 }}"
                   {% endif %}
                   autocomplete="customer_fax1"
-                  {% if form.errors contains 'customer_fax1' %}
-                    aria-invalid="true"
-                    aria-describedby="RegisterForm-customer_fax-error"
-                  {% endif %}
           >
 
           <input
@@ -397,10 +368,6 @@
                     value="{{ form.customer_fax2 }}"
                   {% endif %}
                   autocomplete="customer_fax2"
-                  {% if form.errors contains 'customer_fax2' %}
-                    aria-invalid="true"
-                    aria-describedby="RegisterForm-customer_fax-error"
-                  {% endif %}
           >
 
           <input
@@ -411,10 +378,6 @@
                     value="{{ form.customer_fax3 }}"
                   {% endif %}
                   autocomplete="customer_fax3"
-                  {% if form.errors contains 'customer_fax3' %}
-                    aria-invalid="true"
-                    aria-describedby="RegisterForm-customer_fax-error"
-                  {% endif %}
           >
         </div>
       </fieldset>
