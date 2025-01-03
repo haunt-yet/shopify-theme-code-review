@@ -1,0 +1,9 @@
+{% comment %}
+  【商品詳細】商品番号
+{% endcomment %}
+
+{% if product.metafields.custom.p_number != blank %}
+  <p class="product__pnumber">商品番号：{{ product.metafields.custom.p_number }}</p>
+{% endif %}
+
+

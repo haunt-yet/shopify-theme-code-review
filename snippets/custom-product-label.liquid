@@ -1,0 +1,36 @@
+{% comment %}
+  【商品詳細】ラベル
+{% endcomment %}
+
+{% assign p__label_v1 = "新商品" %}
+{% assign p__label_v2 = "おすすめ商品" %}
+{% assign p__label_v3 = "限定商品" %}
+
+<ul class="product__label">
+  {% for tag in product.tags %}
+      {% if tag == p__label_v1
+            or tag == p__label_v2
+            or tag == p__label_v3
+            or tag == block.settings.p_label_1
+            or tag == block.settings.p_label_2
+            or tag == block.settings.p_label_3
+            or tag == block.settings.p_label_4
+            or tag == block.settings.p_label_5
+            or tag == block.settings.p_label_6
+            or tag == block.settings.p_label_7
+            or tag == block.settings.p_label_8
+            or tag == block.settings.p_label_9
+            or tag == block.settings.p_label_10
+      %}
+        <li class="product__label__tag {% if tag == p__label_v1 %}--new{%  endif %}" 
+          style="
+          {% if tag == p__label_v1 %}order: 1;
+          {% elsif tag == p__label_v2 %}order: 2;
+          {% elsif tag == p__label_v3 %}order: 3;
+          {% else %}order: 4;
+          {% endif %}" >{{ tag }}</li>
+      {% endif %} 
+  {% endfor %}
+</ul>
+
+

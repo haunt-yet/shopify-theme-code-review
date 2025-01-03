@@ -1,0 +1,26 @@
+{% comment %}
+  【商品詳細】配達可能地域
+{% endcomment %}
+
+{% if product.metafields.custom.p_deliveryarea != blank %}
+<div id="product__deliveryarea" class="product__deliveryarea sp__inner">
+  <h2 class="product__deliveryarea__title">配達可能地域</h2>
+  <div class="product__deliveryarea__text">{{ product.metafields.custom.p_deliveryarea | newline_to_br }}</div>
+</div>
+{% endif %}  
+
+{% schema %}
+{
+  "name": "配達可能地域",
+  "tag": "section",
+  "enabled_on": {
+    "templates": ["product"],
+    "groups": ["aside"]
+  },
+  "presets": [
+    {
+      "name": "配達可能地域"
+    }
+  ]
+}
+{% endschema %}

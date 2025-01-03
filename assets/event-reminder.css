@@ -1,0 +1,444 @@
+.mall-block {
+  /* Base styles */
+  .mall-summary {
+    max-width: min(90%, 40em);
+    margin: 0 auto;
+    padding: 15px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .mall-summary__headline {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  /* Form styles */
+  .mall-summary__form {
+    max-width: 800px;
+    position: relative;
+  }
+
+  .mall-summary__form .field {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    border: none;
+  }
+
+  .mall-summary__form .field__label {
+    width: 140px;
+    margin-right: 20px;
+    padding-top: 5px;
+  }
+
+  .mall-summary__form .field__input,
+  .mall-summary__form .field__select,
+  .mall-summary__form .text-area {
+    width: 100%;
+    padding: 16px;
+    height: 50px;
+    border: 1px solid #ccc;
+    background: transparent;
+  }
+
+  .mall-summary__form .field__select {
+    padding-right: 8px;
+  }
+
+  .mall-summary__form .text-area {
+    min-height: 120px;
+    height: auto;
+    resize: vertical;
+  }
+
+  /* Event reminder form specific styles */
+  #event-reminder-form form {
+    max-width: 800px;
+    width: 100%;
+  }
+
+  #event-reminder-form input[type="date"] {
+    position: relative;
+    color: transparent !important;
+    padding: 8px !important;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white !important;
+    width: 100%;
+    border: 1px solid #ccc;
+    height: 3.3rem;
+  }
+
+  #event-reminder-form .field {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    border: none;
+    background: none;
+  }
+
+  #event-reminder-form label {
+    width: 16rem;
+    margin-right: 1.25rem;
+    padding-top: 0.3125rem;
+  }
+
+  #event-reminder-form .field > div {
+    flex: 1;
+    border: none;
+  }
+
+  #event-reminder-form input[type="text"],
+  #event-reminder-form input[type="number"],
+  #event-reminder-form select,
+  #event-reminder-form textarea {
+    height: 3.3rem;
+    line-height: 3.3rem;
+    width: 100%;
+    border: 1px solid #ccc;
+    padding: 8px;
+  }
+
+  #event-reminder-form textarea {
+    height: auto;
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  /* Date input styles - keeping necessary !important */
+  #event-reminder-form input[type="date"] {
+    position: relative;
+    color: transparent !important;
+    padding: 8px !important;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: white !important;
+    width: 100%;
+    border: 1px solid #ccc;
+    height: 3.3rem;
+  }
+
+  #event-reminder-form input[type="date"]::-webkit-datetime-edit-text,
+  #event-reminder-form input[type="date"]::-webkit-datetime-edit-month-field,
+  #event-reminder-form input[type="date"]::-webkit-datetime-edit-day-field,
+  #event-reminder-form input[type="date"]::-webkit-datetime-edit-year-field {
+    opacity: 0 !important;
+  }
+
+  #event-reminder-form input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute !important;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+  }
+
+  #event-reminder-form input[type="date"]::before {
+    content: attr(data-display);
+    position: absolute !important;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000;
+  }
+
+  #event-reminder-form input[type="date"]:not([data-display])::before {
+    content: attr(placeholder);
+    color: #757575;
+  }
+
+  /* Button styles */
+  .mall-summary__form .button--secondary {
+    padding: 14px;
+    background: #ff0099;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 30px;
+    margin-left: 160px;
+    display: block;
+  }
+
+  .mall-summary__form .button--secondary:hover {
+    opacity: 0.9;
+  }
+
+  /* Remove pseudo-elements */
+  #event-reminder-form .field:before,
+  #event-reminder-form .field:after,
+  .mall-summary__form .field:before,
+  .mall-summary__form .field:after {
+    display: none !important;
+    border: none !important;
+    content: none !important;
+  }
+
+  /* Focus states */
+  #event-reminder-form input:focus,
+  #event-reminder-form select:focus,
+  #event-reminder-form textarea:focus,
+  .mall-summary__form .field__input:focus,
+  .mall-summary__form .field__select:focus,
+  .mall-summary__form .text-area:focus {
+    outline: none !important;
+    border-color: #ccc !important;
+    box-shadow: none !important;
+  }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .mall-summary {
+      padding: 16px;
+    }
+
+    .mall-summary__headline {
+      font-size: 20px;
+    }
+
+    .mall-summary__form .field__input,
+    .mall-summary__form .field__select,
+    .mall-summary__form .text-area {
+      padding: 10px;
+    }
+  }
+
+  /* Event Reminder List styles */
+  .mall-reminder-list {
+    margin-bottom: 40px;
+  }
+
+  .mall-reminder-list__title {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  .mall-reminder-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 16px;
+  }
+
+  .mall-reminder-table th,
+  .mall-reminder-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  .mall-reminder-table td {
+    max-width: 11rem;
+    word-wrap: break-word;
+    white-space: normal;
+  }
+
+  .mall-reminder-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+
+  .mall-reminder-table tr:hover {
+    background-color: #f9f9f9;
+  }
+
+  /* Action buttons in table */
+  .mall-reminder-action {
+    display: inline-flex;
+    gap: 8px;
+  }
+
+  .mall-reminder-button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .mall-reminder-button--edit {
+    background-color: #ff69b4;
+    color: white;
+  }
+
+  .mall-reminder-button--delete {
+    background-color: #666;
+    color: white;
+  }
+
+  .mall-reminder-button:hover {
+    opacity: 0.8;
+  }
+
+  /* Review styles */
+  .mall-review .mall-review__list {
+    list-style: none;
+    padding-inline: 0;
+    margin: 0;
+  }
+
+  .mall-review .mall-review__list-item {
+    padding: 16px 0;
+    border-top: 1px solid #ececec;
+  }
+
+  .mall-review .mall-review__list-item-meta-headline {
+    margin: 8px 0;
+  }
+
+  /* Form section styles */
+  .mall-form-section {
+    display: none;
+  }
+
+  .mall-form-section__title {
+    font-size: 18px;
+    margin-bottom: 24px;
+    color: #333;
+    display: none; /* Ẩn title mặc định */
+  }
+
+  .mall-form-section__title.is-active {
+    display: block; /* Hiển thị khi form active */
+  }
+
+  /* Style cho button trigger */
+  .mall-reminder-trigger {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #ff0099;
+    color: white;
+    margin-left: auto;
+  }
+
+  .mall-reminder-trigger:hover {
+    opacity: 0.9;
+  }
+
+  /* Style cho form và list container */
+  .mall-reminder-form-container {
+    display: none;
+  }
+
+  .mall-reminder-form-container.is-active {
+    display: block;
+  }
+
+  .mall-reminder-list-container.is-hidden {
+    display: none;
+  }
+
+  /* Container cho button */
+  .mall-reminder-button-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  /* Đảm bảo list hiển thị mặc định */
+  .mall-reminder-list {
+    display: block;
+  }
+
+  /* Style chung cho cả 2 button */
+  .mall-reminder-trigger,
+  .mall-reminder-back-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: auto;
+  }
+
+  /* Style riêng cho button đăng ký */
+  .mall-reminder-trigger {
+    background: #ff0099;
+    color: white;
+    justify-content: center;
+  }
+
+  /* Style riêng cho button quay lại */
+  .mall-reminder-back-button {
+    background: #666;
+    color: white;
+  }
+
+  /* Hover effect */
+  .mall-reminder-trigger:hover,
+  .mall-reminder-back-button:hover {
+    opacity: 0.9;
+  }
+
+  /* Form section mặc định ẩn */
+  .mall-form-section {
+    display: none;
+  }
+
+  /* Đảm bảo list hiển thị mặc định */
+  .mall-reminder-list {
+    display: block;
+  }
+
+  /* Form section title mặc định ẩn */
+  .mall-form-section__title {
+    display: none;
+  }
+
+  /* Loading và Error styles */
+  .mall-reminder-loading,
+  .mall-reminder-error {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+  }
+
+  .mall-reminder-error {
+    color: #dc3545;
+  }
+
+  .mall-reminder-loading::after {
+    content: "...";
+    animation: loading 1s infinite;
+  }
+
+  @keyframes loading {
+    0% {
+      content: ".";
+    }
+    33% {
+      content: "..";
+    }
+    66% {
+      content: "...";
+    }
+  }
+
+  .mall-reminder-success {
+    background-color: #d4edda;
+    color: #155724;
+    text-align: center;
+    padding: 10px;
+    animation: fadeOut 3s forwards;
+    animation-delay: 2s;
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+}

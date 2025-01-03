@@ -1,0 +1,45 @@
+/* Only CSS for customer logged in */
+.customer-logged-in {
+  .facets__disclosure:has(input[name="filter.p.tag"]),
+  .mobile-facets__details:has(input[name="filter.p.tag"]) {
+    display: none !important;
+  }
+
+  .active-facets__button[data-name="filter.p.tag"] {
+    display: none !important;
+  }
+
+  /* Hiden filter tag on desktop and mobile */
+  [id*="filter.p.tag-"] {
+    display: none !important;
+  }
+
+  /* Hiden active filter tags */
+  .active-facets__button[href*="filter.p.tag="] {
+    display: none !important;
+  }
+
+  /* Hiden "Remove all" button when only filter tags */
+  .active-facets:has(.active-facets__button[href*="filter.p.tag="]:only-of-type)
+    .active-facets__button-remove {
+    display: none !important;
+  }
+
+  /* Hiden active-facets container when only filter tags */
+  .active-facets:has(
+      .active-facets__button[href*="filter.p.tag="]:only-of-type
+    ):not(:has(.active-facets__button:not([href*="filter.p.tag="]))) {
+    display: none !important;
+  }
+
+  /* Hiden filter tag on desktop and mobile */
+  [id*="filter.p.tag-"] {
+    display: none !important;
+  }
+
+  /* Hiden active filter tags */
+  facet-remove[data-filter-tag] {
+    display: none !important;
+  }
+
+}

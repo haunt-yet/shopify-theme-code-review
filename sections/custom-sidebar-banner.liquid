@@ -1,0 +1,53 @@
+{% comment %}
+  【サイドバー】バナー
+{% endcomment %}
+<ul class="sidebar__banner__list">
+  {% for block in section.blocks %}
+    <li>
+      {% if block.settings.s__banner_url %}
+        <a href="{{ block.settings.s__banner_url }}">{{ block.settings.s__banner_image | img_url: "master" | img_tag }}</a>
+      {% else %}
+        {{ block.settings.s__banner_image | img_url: "master" | img_tag }}
+      {% endif %}
+    </li> 
+  {% endfor %} 
+</ul>
+
+{% schema %}
+{
+  "name": "バナー",
+  "class": "sidebar__banner",
+  "disabled_on": {
+    "groups": ["header","footer","aside"]
+  },
+  "settings": [
+  ],
+  "blocks": [
+    {
+        "name": "バナー",
+        "type": "banner",
+        "settings": [
+            {
+                "type": "image_picker",
+                "id": "s__banner_image",
+                "label": "バナー画像",
+            },
+            {
+                "type": "url",
+                "id": "s__banner_url",
+                "label": "URL",
+            },
+          
+        ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "バナー",
+      "blocks": [
+      ]
+    }
+  ]
+}
+  
+{% endschema %}

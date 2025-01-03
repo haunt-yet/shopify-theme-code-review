@@ -1,0 +1,105 @@
+{% comment %}
+  Renders event reminder
+
+  Accepts:
+  - user_key: {String} Identify unique customer generate by shopify flow
+
+  Usage:
+  {% render 'event-reminder', user_key: customer.metafields.custom.user_key.value %}
+{% endcomment %}
+
+<div class="mall-block">
+  <div class="mall-summary">
+    <div class="mall-summary__header">
+      <h2 class="mall-summary__headline"></h2>
+    </div>
+
+    <!-- List Section -->
+    <div class="mall-reminder-list">
+      <h3 class="mall-reminder-list__title">イベントリマインダー一覧</h3>
+      <div class="mall-reminder-button-container">
+        <button type="button" class="mall-reminder-trigger">新規追加</button>
+      </div>
+      <table class="mall-reminder-table">
+        <thead>
+          <tr>
+            <th>イベント</th>
+            <th>イベント対象日</th>
+            <th>イベント何日前</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="reminder-list-body">
+          <!-- JavaScript will populate this -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Form Section -->
+    <div class="mall-form-section" style="display: none;">
+      <div class="mall-reminder-button-container">
+        <button type="button" class="mall-reminder-back-button">一覧に戻る</button>
+      </div>
+      <h3 class="mall-form-section__title">イベントリマインダー登録</h3>
+      <div id="event-reminder-container">
+        <form id="event-reminder-form" autocomplete="off" class="mall-summary__form">
+          <input type="hidden" name="id" value="">
+          <input
+            type="hidden"
+            name="user_key"
+            id="user_key"
+            value="{{ user_key }}"
+          >
+
+          <!-- Event Select Field -->
+          <div class="field">
+            <label for="admin_event_reminder_id">イベント</label>
+            <select name="admin_event_reminder_id" id="admin_event_reminder_id" required>
+              <option value="" selected>選択してください</option>
+            </select>
+          </div>
+
+          <!-- Event Date Field -->
+          <div class="field">
+            <label for="event_date">イベント対象日</label>
+            <div id="event_date_display"></div>
+            <div id="event_date_month_day" hidden>
+              <select id="event_date_month" name="event_date_month"   style="width:100px">
+                <option value="">月を選択</option>
+              </select>
+              月
+              <select id="event_date_day" name="event_date_day" style="width:100px; margin-left: 10px;">
+                <option value="">日を選択</option>
+              </select>
+              日
+            </div>
+          </div>
+
+          <!-- Days Before Field -->
+          <div class="field">
+            <label for="event_days_before">イベント何日前</label>
+            <select name="event_date_before"  style="width:100px">
+              <option value="20">20</option>
+              <option value="15">15</option>
+              <option value="10">10</option>
+              <option value="7">7</option>
+              <option value="5">5</option>
+              <option value="3">3</option>
+            </select> 日前
+          </div>
+
+          <!-- Remarks Field -->
+          <div class="field">
+            <label for="remark">備考</label>
+            <textarea id="remark" name="remark"></textarea>
+          </div>
+
+          <!-- Submit Button -->
+          <div class="button-container">
+            <button type="submit" class="button button--secondary">登録</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

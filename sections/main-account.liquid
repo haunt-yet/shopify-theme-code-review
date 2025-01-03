@@ -1,0 +1,158 @@
+{% render 'custom-redirect' %}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="account mypageTop section-{{ section.id }}-padding">
+
+  {% assign title = 'customer.account.title' | t %}
+  {% render 'custom-mypage-head',
+    title: title,
+    subtitle: 'Mypage',
+    backbtn: 'no',
+  %}
+
+  <div class="mp__twocolumn">
+    <aside class="mp__sidemenu">
+      <div class="mp__sidemenu__title">Menu</div>
+      <ul class="reset--list mp__sidemenu__list">
+        <li><a href="#">注文履歴</a></li>
+        <li><a href="/account/addresses">アカウント情報</a></li>
+        <li><a href="/account?view=plate">立札情報</a></li>
+        <li><a href="/account?view=reminder">イベントリマインダー</a></li>
+        <li><a href="/pages/faq">よくあるご質問</a></li>
+        <li><a href="/pages/contact">お問い合わせ</a></li>
+      </ul>
+    </aside>
+
+    <div class="mp__rightcnt">
+      {% comment %} 注文履歴{% endcomment %}
+      <h2 class="mp__title">{{ 'customer.orders.title' | t }}</h2>
+
+      {% paginate customer.orders by 50 %}
+        {%- if customer.orders.size > 0 -%}
+          <table class="mp__ordertable">
+            <thead>
+              <tr>
+                <th class="tx-l">注文番号</th>
+                <th class="tx-l">注文日</th>
+                <th>支払い状況</th>
+                <th>発送状況</th>
+                <th class="tx-r">合計</th>
+              </tr>
+            </thead>
+            <tbody>
+              {%- for order in customer.orders -%}
+                <tr>
+                  <td class="td__ordernum"><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
+                  <td>{{ order.created_at | time_tag: format: 'date' }}</td>
+                  <td class="td__label tx-ce"><span {% if order.financial_status == 'paid' %}class="fin"{% endif %}>{{ order.financial_status_label }}</span></td>
+                  <td class="td__label tx-ce"><span {% if order.fulfillment_status == 'fulfilled' %}class="fin"{% endif %}>{{ order.fulfillment_status_label }}</span></td>
+                  <td class="td__orderamount tx-r">￥{{ order.total_net_amount | money_with_currency }}</td>
+                </tr>
+              {%- endfor -%}
+            </tbody>
+          </table>
+        {%- else -%}
+          <p>{{ 'customer.orders.none' | t }}</p>
+        {%- endif -%}
+
+        {%- if paginate.pages > 1 -%}
+          {%- if paginate.parts.size > 0 -%}
+            <nav class="pagination" role="navigation" aria-label="{{ 'general.pagination.label' | t }}">
+              <ul role="list">
+                {%- if paginate.previous -%}
+                  <li>
+                    <a href="{{ paginate.previous.url }}" aria-label="{{ 'general.pagination.previous' | t }}">
+                      <span class="svg-wrapper">
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </span>
+                    </a>
+                  </li>
+                {%- endif -%}
+
+                {%- for part in paginate.parts -%}
+                  <li>
+                    {%- if part.is_link -%}
+                      <a href="{{ part.url }}" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                        {{- part.title -}}
+                      </a>
+                    {%- else -%}
+                      {%- if part.title == paginate.current_page -%}
+                        <span aria-current="page" aria-label="{{ 'general.pagination.page' | t: number: part.title }}">
+                          {{- part.title -}}
+                        </span>
+                      {%- else -%}
+                        <span>{{ part.title }}</span>
+                      {%- endif -%}
+                    {%- endif -%}
+                  </li>
+                {%- endfor -%}
+
+                {%- if paginate.next -%}
+                  <li>
+                    <a href="{{ paginate.next.url }}" aria-label="{{ 'general.pagination.next' | t }}">
+                      <span class="svg-wrapper">
+                        {{- 'icon-caret.svg' | inline_asset_content -}}
+                      </span>
+                    </a>
+                  </li>
+                {%- endif -%}
+              </ul>
+            </nav>
+          {%- endif -%}
+        {%- endif -%}
+      {% endpaginate %}
+
+</div><!-- ./c__rightcnt -->
+  </div><!-- ./c__twocolumn -->
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.main-account.name",
+  "settings": [
+    {
+      "type": "header",
+      "content": "t:sections.all.padding.section_padding_heading"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "t:sections.all.padding.padding_bottom",
+      "default": 36
+    }
+  ]
+}
+{% endschema %}
+
+<div id="eventreminder">
+  {% render 'event-reminder', user_key: customer.metafields.custom.user_key.value %}
+</div>
+{{ 'event-reminder.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'event-reminder.js' | asset_url }}" defer="defer"></script>

@@ -1,0 +1,9 @@
+{% comment %}
+  MD&ADの顧客タグを所有しているユーザーがアクセスした場合は自動的にトップページへリダイレクト
+{% endcomment %}
+
+{% if customer and customer.tags contains settings.customer_tag_msad %}
+  <script>
+    window.location.href = '/';
+  </script>
+{% endif %}

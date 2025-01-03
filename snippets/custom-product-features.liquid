@@ -1,0 +1,19 @@
+{% comment %}
+  【商品詳細】特徴
+{% endcomment %}
+
+<ul class="product__features sp__inner">
+  <li>立札・カード無料</li>
+  
+  {% comment %} ラッピングでお任せのオプションがある場合 {% endcomment %}
+  <li>ラッピング無料（お任せの場合）</li>
+  {% comment %} ./ラッピングでお任せのオプションがある場合 {% endcomment %}
+
+  <li>送料無料（一部地域を除く）</li>
+  <li>納品画像が確認できる</li>
+
+  {%- assign features = product.metafields.custom.p_features| split: '","' -%}
+    {% for value in features %}
+    <li>{{ value | replace: '["', '' | replace: '"]', '' }}</li>
+  {% endfor %}
+</ul>

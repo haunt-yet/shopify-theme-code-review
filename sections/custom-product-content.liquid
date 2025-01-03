@@ -1,0 +1,98 @@
+{% comment %}
+  【商品詳細】商品説明・注意事項
+{% endcomment %}
+
+  <div class="js_tab c_tab">
+    <ul class="tabs">
+      <li class="tab is-active" data-tab="01">商品説明</li>
+      <li class="tab" data-tab="02">立札・カード</li>
+      <li class="tab" data-tab="03">注意事項</li>
+    </ul>
+    <div class="tab__cnts">
+      {% comment %}商品説明{% endcomment %}
+      <div class="tab__cnt is-show" data-panel="01">
+        {% render 'custom-content--explanation' %}
+      </div>
+
+      {% comment %}立札・カード{% endcomment %}
+      <div class="tab__cnt" data-panel="02">
+        {% render 'custom-content--panel' %}
+      </div>
+
+      {% comment %}注意事項{% endcomment %}
+      <div class="tab__cnt" data-panel="03">
+        {% render 'custom-content--attention' %}
+      </div>
+    </div>
+  </div>
+
+
+{% javascript %}
+'use strict';
+const tabMenus = document.querySelectorAll('.js_tab .tab');
+tabMenus.forEach((tabMenu) => {
+  tabMenu.addEventListener('click', tabSwitch);
+})
+
+function tabSwitch(e) {
+  const tabTargetData = e.currentTarget.dataset.tab;
+  const tabList = e.currentTarget.closest('.js_tab .tabs');
+  const tabItems = tabList.querySelectorAll('.js_tab .tab');
+  const tabPanelItems = tabList.
+  nextElementSibling.querySelectorAll('.js_tab .tab__cnt');
+
+  tabItems.forEach((tabItem) => {
+    tabItem.classList.remove('is-active');
+  })
+  tabPanelItems.forEach((tabPanelItem) => {
+    tabPanelItem.classList.remove('is-show');
+  })
+
+  e.currentTarget.classList.add('is-active');
+  tabPanelItems.forEach((tabPanelItem) => {
+    if (tabPanelItem.dataset.panel ===  tabTargetData) {
+      tabPanelItem.classList.add('is-show');
+    }
+  })
+
+}
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "商品説明・注意事項",
+  "tag": "section",
+  "class": "product__cnt",
+  "enabled_on": {
+    "templates": ["product"],
+    "groups": ["aside"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "注意事項",
+      "info": "※【1】商品については商品登録画面にて、商品ごとに編集してください"
+    },
+    {
+      "type": "textarea",
+      "id": "content_attention1",
+      "label": "【2】ご注文について",
+    },
+    {
+      "type": "textarea",
+      "id": "content_attention2",
+      "label": "【3】配送について",
+    },
+    {
+      "type": "textarea",
+      "id": "content_attention3",
+      "label": "【４】お届け後について",
+    },
+  ],
+  "presets": [
+    {
+      "name": "商品説明・注意事項"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,547 @@
+{% comment %}
+  【商品詳細】購入へ進む
+{% endcomment %}
+
+{% comment %}
+----- 開発用 -----
+全部開いた状態にしておきたいときは、下記をこの{％ endcomment ％}の下に追記してください。
+{% endcomment %}
+<style>
+.product__pbuy__area {
+  max-height: 100%!important;
+}
+.product__pbuy__step__cnt {
+  max-height: 100%!important;
+  padding-bottom: 60px;
+}
+</style>
+
+
+<div class="product__pbuy pbuy">
+  {% if product.selected_or_first_available_variant.available == false or quantity_rule_soldout or product.selected_or_first_available_variant == null %}
+    <div class="btns btns--default btns--icon product__pbuy__openbtn product__pbuy__openbtn--sold">ただいま品切れ中です</div>
+  {% else %}
+    <div class="btns btns--default btns--arrow btns--arrow--bottom btns--icon js-pbuy-fbtn product__pbuy__openbtn">購入へ進む</div>
+  
+    <div class="product__pbuy__area">
+      <ul class="attention product__pbuy__attention">
+        <li>複数個まとめて購入をした場合は、立札やメッセージは同じ内容となります。</li>
+        <li>一度の購入でお届け先は１つのみとなります。<br>複数箇所へお届けを希望される場合は、分けて購入を行なってください。</li>
+      </ul>
+  
+      <ul class="form product__pbuy__step">
+        {% comment %} STEP1：ご利用の用途 {% endcomment %}
+        <li class="product__pbuy__step__block active">
+          <div class="title--01 product__pbuy__step__title"><span>1</span>ご利用の用途</div>
+          <div class="product__pbuy__step__cnt open">
+            <ul class="attention">
+              <li>各式場（葬祭場、結婚式場等）へのお届けは、持込不可や別途料金が発生する場合がございます。事前にご確認をお願いします。</li>     
+            </ul>
+  
+             <fieldset class="form__box form__radio mt-m">
+              <div class="form__radio__box" id="product_option1">
+                {% comment %}
+                <label>
+                  <input type="radio" name="radio1" checked>
+                  <div class="form__radio__content">
+                    <p>贈り花<br>＜祝い花＞</p>
+                  </div>
+                </label>
+              
+                <label>
+                  <input type="radio" name="radio1">
+                  <div class="form__radio__content">
+                    <p>贈り花<br>＜供花＞</p>
+                  </div>
+                </label>
+              
+                <label>
+                  <input type="radio" name="radio1">
+                  <div class="form__radio__content">
+                    <p>その他</p>
+                  </div>
+                </label>
+                {% endcomment %}
+              </div>
+            </fieldset>
+
+            {% comment %} 贈り花＜祝い花＞ or 贈り花＜供花＞ を選択した場合に表示 {% endcomment %}
+            <fieldset class="form__box form__select">
+              <legend class="form__title">▼「贈り花」を選択時、ご用途をお知らせ下さい。</legend>
+              <div class="form__selectbox">
+                <select>
+                  <option>選択してください</option>
+                  <option>式典・イベント</option>
+                  <option>開店祝い（お店・店舗）</option>
+                </select>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__box form__text">
+              <legend class="form__title">式典の名称</legend>
+              <input type="text"c class="form__box__error"/>
+              <p class="form__box__errortext">「XX」を入力してください。</p>
+              <p class="form__box__errortext">「YY」を入力してください。</p>
+            </fieldset>
+
+            <fieldset class="form__box form__text">
+              <legend class="form__title">開始時間</legend>
+              <input type="text"/>
+            </fieldset>
+            {% comment %} ------------------------------------------------------- {% endcomment %}
+
+            {% comment %} その他 を選択した場合に表示 {% endcomment %}
+            <fieldset class="form__box form__textarea" style="display: none;">
+              <legend class="form__title">▼その他の場合は、具体的にお書き下さい。（全角54文字）</legend>
+              <textarea></textarea>
+            </fieldset>
+            {% comment %} ------------------------------------------------------- {% endcomment %}      
+  
+            <div class="btns btns--default btns--arrow btns--arrow--bottom product__pbuy__step__nextbtns js-pbuy-next" id="btn_next_option1">次へ</div>
+            <p class="form__box__errorbox" style="display:none;">未入力の項目があります。</p>
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+          
+        {% comment %} STEP2：立札・カード {% endcomment %}
+        <li class="product__pbuy__step__block">
+          <div class="title--01 product__pbuy__step__title"><span>2</span>立札・カード</div>
+          <div class="product__pbuy__step__cnt">
+            <a href="#" class="textlink">立札・カードについて</a>
+  
+            {% comment %} STEP1でその他 を選択した場合に表示 {% endcomment %}
+            <div style="display: none;">
+              <p class="mt-s">立札・カードは「贈り花」専用です。</p>
+            </div>
+            {% comment %} ------------------------------------------------------- {% endcomment %}   
+  
+            {% comment %} STEP1でその他以外 を選択した場合に表示 {% endcomment %}
+            <fieldset class="form__box form__radio mt-m">
+              <div class="form__radio__box" id="product_option2">
+                {% comment %}
+                <label>
+                  <input type="radio" name="radio2" checked>
+                  <div class="form__radio__content">
+                    <p>なし</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio2">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>立札</p>
+                    <p>0円</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio2">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>カード</p>
+                    <p>0円</p>
+                  </div>
+                </label>
+                {% endcomment %}
+              </div>
+            </fieldset>
+            {% comment %} ------------------------------------------------------- {% endcomment %}   
+
+            <hr>
+            
+            {% comment %} 立札 を選んだ場合 {% endcomment %}
+            <div class="btns btns--outline product__pbuy__platebtn" id="platemodal">登録済みの立札情報から反映する</div>
+            {% render 'custom-product-platemodal' %}
+
+            
+            <fieldset class="form__box form__radio">
+              <legend class="form__title">▼立札タイプをお選び下さい。</legend>
+              <ul class="attention">
+               <li>文字数が多い場合、アルファベット表記の場合などは、横書き対応させていただくことがあります。</li>
+              </ul>
+
+              <div class="form__radio__box mt-s" id="product_option3_1">
+                {% comment %}
+                <label>
+                  <input type="radio" name="radio3">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>送り主のみ</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio3">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>送り主 + 相手先名</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio3">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>その他</p>
+                  </div>
+                </label>
+                {% endcomment %}
+              </div>
+            </fieldset>
+
+            <hr>
+  
+            {% comment %} ↑を選択したら下記を表示 {% endcomment %}
+            <fieldset class="form__box form__radio">
+              <legend class="form__title">▼送り主 + 相手先名</legend>  
+              <div class="form__radio__box" id="product_option3_2">
+                {% comment %}
+                <label>
+                  <input type="radio" name="radio4">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>会社 + 代表</p>
+                  </div>
+                </label>
+            
+                <label class="radio-card">
+                  <input type="radio" name="radio4">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>会社 + 代表複数</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio4">
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>複数社名＋代表</p>
+                  </div>
+                </label>
+              {% endcomment %}
+              </div>
+            </fieldset>
+            {% comment %} ------------------------------------------------------- {% endcomment %}   
+
+            <hr>
+    
+            {% comment %} ↑を選択したら下記を表示 {% endcomment %}
+            <p class="form__title">▼立札の内容を入力してください</p>
+            <!-- 入力サンプル -->
+            <div class="form__sample">
+              <img src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+              <div class="form__sample__cnt">
+                <div class="form__sample__name"><span>送り主のみ</span>会社 + 代表複数</div>
+                <p>①御祝の言葉</p>
+                <p>②会社名</p>
+                <p>③役職名・氏名(1)</p>
+                <p>④役職名・氏名(2)</p>
+              </div>
+            </div><!-- ./form__sample -->
+            <!-- ./入力サンプル -->
+
+            {% comment %}
+            <fieldset class="form__box form__radio">
+              <legend class="form__title">①御祝の言葉</legend>
+              <div class="form__radio__box">
+                <label>
+                  <input type="radio" name="radio5" checked>
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>祝</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio5" />
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="立札のサンプル">
+                    <p>御祝</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="radio5" />
+                  <div class="form__radio__content">
+                    <p>その他</p>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form__box form__text">
+              <legend class="form__title">▼その他の場合は、具体的にお書き下さい。（全角XX文字）</legend>
+              <input type="text" />
+            </fieldset>
+            {% endcomment %}
+
+            <div id="product_option3_2_form">
+              {% comment %}
+              <fieldset class="form__box form__text">
+                <legend class="form__title">②【相手先】会社名</legend>
+                <input type="text">
+              </fieldset>
+  
+              <fieldset class="form__box form__text">
+                <legend class="form__title">③【相手先】役職名・氏名</legend>
+                <input type="text">
+              </fieldset>
+  
+              <fieldset class="form__box form__text">
+                <legend class="form__title">④会社名</legend>
+                <input type="text">
+              </fieldset>
+  
+              <fieldset class="form__box form__text">
+                <legend class="form__title">⑤役職名・氏名(1)</legend>
+                <input type="text">
+              </fieldset>
+  
+              <fieldset class="form__box form__text">
+                <legend class="form__title">⑥役職名・氏名(2)</legend>
+                <input type="text">
+              </fieldset>
+              {% endcomment %}
+            </div>
+
+            <div class="mt-l">
+              <button class="btns btns--outline product__pbuy__platebtn">入力した立札情報を登録する</button>
+              <p class="form__box__errorbox" style="display:none;">登録数が最大のため登録ができませんでした。</p>
+              <p class="form__box__successbox" style="display:none;">登録が完了いたしました。</p>
+              <ul class="attention mt-s">
+                <li>入力した立札情報を登録すると、次回より登録データから自動的に反映を行うことができます。</li>
+              </ul>
+            </div>
+            {% comment %} ------------------------------------------------------- {% endcomment %} 
+  
+            {% comment %} カード を選んだ場合 {% endcomment %}
+            <div style="display: none;">
+              <p class="form__title">▼カードの内容を入力してください</p>
+              <!-- 入力サンプル -->
+              <div class="form__sample form__sample--card">
+                <img src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/samplecard.png?v=1734662917" alt="カードのサンプル">
+                <div class="form__sample__cnt">
+                    <p>①御受取人様名</p>
+                    <p>②メッセージ</p>
+                    <p>③送り主様名</p>
+                </div>
+              </div><!-- ./form__sample -->
+              <!-- ./入力サンプル -->
+  
+              <fieldset class="form__box form__text mt-m">
+                <legend class="form__title">①御受取人様名</legend>
+                <input type="text">
+              </fieldset>
+
+              <fieldset class="form__box form__textarea">
+                <legend class="form__title">②メッセージ（全角XX文字）</legend>
+                <textarea></textarea>
+              </fieldset>
+
+              <fieldset class="form__box form__text">
+                <legend class="form__title">③送り主様名</legend>
+                <input type="text">
+              </fieldset>
+            </div>
+            {% comment %} ------------------------------------------------------- {% endcomment %} 
+  
+  
+            <div class="btns btns--default btns--arrow btns--arrow--bottom product__pbuy__step__nextbtns js-pbuy-next">次へ</div>
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+  
+        {% comment %} STEP3：ラッピング {% endcomment %}
+        <li class="product__pbuy__step__block">
+          <div class="title--01 product__pbuy__step__title"><span>3</span>ラッピング</div>
+          <div class="product__pbuy__step__cnt">
+            <a href="#" class="textlink">ラッピングについて</a>
+  
+            <fieldset class="form__box form__radio mt-m">
+              <div class="form__radio__box">
+                <label>
+                  <input type="radio" name="category" value="お任せ" checked>
+                  <div class="form__radio__content">
+                    <p>お任せ</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="category" value="赤系" />
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="赤系">
+                    <p>赤系</p>
+                    <p>0円</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="category" value="緑系" />
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="緑系">
+                    <p>緑系</p>
+                    <p>0円</p>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+  
+            <p class="mt-m">ダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキスト</p>
+            <ul class="attention">
+              <li>ダミーテキストダミーテキストダミーテキストダミーテキスト</li>
+            </ul>
+  
+            <div class="btns btns--default btns--arrow btns--arrow--bottom product__pbuy__step__nextbtns js-pbuy-next">次へ</div>
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+  
+        {% comment %} STEP4：その他 {% endcomment %}
+        <li class="product__pbuy__step__block">
+          <div class="title--01 product__pbuy__step__title"><span>4</span>その他</div>
+          <div class="product__pbuy__step__cnt">
+            <fieldset class="form__box form__radio">
+              <div class="form__radio__box">
+                <label>
+                  <input type="radio" name="category" value="なし" checked>
+                  <div class="form__radio__content">
+                    <p>なし</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="category" value="鉢回収" />
+                  <div class="form__radio__content">
+                    <img class="form__radio--img" src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/message_pattern6.jpg?v=1733447124" alt="鉢回収">
+                    <p>鉢回収</p>
+                    <p>500円</p>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+            
+            <div class="btns btns--default btns--arrow btns--arrow--bottom product__pbuy__step__nextbtns js-pbuy-next">次へ</div>
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+  
+        {% comment %} STEP5：配送方法 {% endcomment %}
+        <li class="product__pbuy__step__block">
+          <div class="title--01 product__pbuy__step__title"><span>5</span>配送方法</div>
+          <div class="product__pbuy__step__cnt">
+            <fieldset class="form__box form__radio">
+              <div class="form__radio__box">
+                <label>
+                  <input type="radio" name="category" value="通常配送">
+                  <div class="form__radio__content">
+                    <p>通常配送</p>
+                  </div>
+                </label>
+              
+                <label class="radio-card">
+                  <input type="radio" name="category" value="お急ぎ便" />
+                  <div class="form__radio__content">
+                    <p>お急ぎ便</p>
+                    <p>2000円</p>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+  
+            <p class="mt-m">最短の納品日でお届けします。最短納品日のお問い合わせをされたい方は、お問い合わせフォームよりお願い致します。</p>
+            <ul class="attention">
+              <li>お届け先の住所、商品の在庫状況によっては最短でのお届けが難しい場合がございます。</li>
+              <li class="red">お急ぎ便をご利用する場合は、他の商品と同封ができません。</li>
+            </ul>
+  
+            {% comment %} お急ぎ便 を選んだ場合 {% endcomment %}
+            <div style="display: none;">
+              <fieldset class="form__box form__select mt-m">
+                <legend class="form__title">▼お届け先(都道府県)</legend>
+                <div class="form__selectbox">
+                  <select>
+                    <option>選択してください</option>
+                    <option>北海道</option>
+                    <option>東京都</option>
+                  </select>
+                </div>
+              </fieldset>
+  
+              <fieldset class="form__box form__text">
+                <legend class="form__title">▼お届け希望日</legend>
+                <input type="date"/>
+              </fieldset>
+  
+              <fieldset class="form__box form__select">
+                <legend class="form__title">▼お届け希望時間</legend>
+                <div class="form__selectbox">
+                  <select>
+                    <option>選択してください</option>
+                    <option>午前中</option>
+                    <option>午後</option>
+                  </select>
+                </div>
+              </fieldset>
+  
+              <ul class="attention mt-m">
+                <li>交通渋滞・物量の増加や天災などが原因で、ご希望に添えない場合がございます。ご了承願います。</li>
+              </ul>
+            </div>
+            {% comment %} ------------------------------------------------------- {% endcomment %} 
+              
+  
+            <div class="btns btns--default btns--arrow btns--arrow--bottom product__pbuy__step__nextbtns js-pbuy-next">次へ</div>
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+  
+        {% comment %} STEP6：ご購入 {% endcomment %}
+        <li class="product__pbuy__step__block">
+          <div class="title--01 product__pbuy__step__title"><span>6</span>ご購入</div>
+          <div class="product__pbuy__step__cnt">
+            <dl class="product__pbuy__step__amount">
+              <dt>合計金額</dt>
+              <dd>22,000円<span>(税込)</span></dd>
+            </dl>
+
+            <button class="btns btns--default btns--arrow btns--icon product__pbuy__openbtn">この商品を購入する</button>
+  
+            {% render 'buy-buttons' %}
+          </div><!-- ./product__pbuy__step__cnt -->
+        </li>
+      </ul>
+    </div><!-- ./product__pbuy__area -->
+  {% endif %}
+</div><!-- ./pbuy -->
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  // ----------------------------
+  // 購入に進む
+  // ----------------------------
+  const toggleButton = document.querySelector(".js-pbuy-fbtn");
+  const targetArea = document.querySelector(".product__pbuy__area");
+
+  toggleButton.addEventListener("click", function () {
+    targetArea.classList.toggle("open");
+    toggleButton.classList.toggle("open");
+  });
+
+  // ----------------------------
+  // 次へ
+  // ----------------------------
+  const nextButtons = document.querySelectorAll(".js-pbuy-next");
+  const steps = document.querySelectorAll(".product__pbuy__step__block");
+
+  nextButtons.forEach((button, index) => {
+    button.addEventListener("click", function () {
+      // 次のステップが存在する場合のみ実行
+      if (steps[index + 1]) {
+        const nextContent = steps[index + 1].querySelector(".product__pbuy__step__cnt");
+        if (nextContent) {
+          nextContent.classList.add("open");
+        }
+      }
+    });
+  });
+});
+</script>
+
+<script src="{{ 'product-option.js' | asset_url }}" defer="defer"></script>

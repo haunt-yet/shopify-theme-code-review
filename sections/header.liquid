@@ -1,0 +1,433 @@
+<link rel="stylesheet" href="{{ 'custom-hf.css' | asset_url }}" media="print" onload="this.media='all'">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script src="{{ 'custom-hf.js' | asset_url }}"></script>
+
+<link rel="stylesheet" href="{{ 'component-list-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-search.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-menu-drawer.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-cart-notification.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- if settings.predictive_search_enabled -%}
+  <link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+{%- if section.settings.menu_type_desktop == 'mega' -%}
+  <link rel="stylesheet" href="{{ 'component-mega-menu.css' | asset_url }}" media="print" onload="this.media='all'">
+{%- endif -%}
+
+{%- style -%}
+  .header {
+    padding: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px 3rem {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px 3rem;
+  }
+
+  .section-header {
+    position: sticky; /* This is for fixing a Safari z-index issue. PR #2147 */
+    margin-bottom: {{ section.settings.margin_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-header {
+      margin-bottom: {{ section.settings.margin_bottom }}px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .header {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<script src="{{ 'cart-notification.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  for block in section.blocks
+    if block.type == '@app'
+      assign has_app_block = true
+    endif
+  endfor
+-%}
+
+<{% if section.settings.sticky_header_type != 'none' %}sticky-header data-sticky-type="{{ section.settings.sticky_header_type }}"{% else %}div{% endif %} class="header-wrapper color-{{ section.settings.color_scheme }} gradient{% if section.settings.show_line_separator %} header-wrapper--border-bottom{% endif %}">
+  {%- liquid
+    assign social_links = false
+    assign localization_forms = false
+
+    if settings.social_twitter_link != blank or settings.social_facebook_link != blank or settings.social_pinterest_link != blank or settings.social_instagram_link != blank or settings.social_youtube_link != blank or settings.social_vimeo_link != blank or settings.social_tiktok_link != blank or settings.social_tumblr_link != blank or settings.social_snapchat_link != blank
+      assign social_links = true
+    endif
+
+    if localization.available_countries.size > 1 and section.settings.enable_country_selector or section.settings.enable_language_selector and localization.available_languages.size > 1
+      assign localization_forms = true
+    endif
+  -%}
+  <header class="h-top header header--{{ section.settings.logo_position }} header--mobile-{{ section.settings.mobile_logo_position }} page-width{% if section.settings.menu_type_desktop == 'drawer' %} drawer-menu{% endif %}{% if section.settings.menu != blank %} header--has-menu{% endif %}{% if has_app_block %} header--has-app{% endif %}{% if social_links %} header--has-social{% endif %}{% if shop.customer_accounts_enabled %} header--has-account{% endif %}{% if localization_forms %} header--has-localizations{% endif %}">
+
+    <div class="custom-header__box pc">
+      <div class="custom-header__top">
+        <a href="#">大口ご注文ご相談口</a>
+        <a href="/pages/contact">お問い合わせ</a>
+      </div>
+      
+    <div class="custom-header">
+    <h1>
+      <a href="/" class="header__logo">
+        {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+        {%- endif -%}
+      </a>
+    </h1>
+
+    <div class="custom-header__menu">
+      <ul class="custom-header__text-link">
+        <li class="nav-item active">
+            <p class="link__text">予算から探す</p>
+          <ul class="pull-down">
+          {% for link in linklists[section.settings.main_linklist_01].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {% if link.type == 'collection_link' and link.object.image %}
+                    {{ link.object.image| image_url: width: 150 | image_tag }}
+                  {% else %}
+                    <img src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/150x150.png?v=1733919436">
+                  {% endif %}
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </li>
+
+        <li class="nav-item active">
+            <p class="link__text">目的から探す</p>
+          <ul class="pull-down">
+          {% for link in linklists[section.settings.main_linklist_02].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {% if link.type == 'collection_link' and link.object.image %}
+                    {{ link.object.image| image_url: width: 150 | image_tag }}
+                  {% else %}
+                    <img src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/sample_banner01.png?v=1734077658">
+                  {% endif %}
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </li>
+
+        <li class="nav-item active">
+            <p class="link__text">種類から探す</p>
+          <ul class="pull-down">
+          {% for link in linklists[section.settings.main_linklist_03].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {% if link.type == 'collection_link' and link.object.image %}
+                    {{ link.object.image| image_url: width: 150 | image_tag }}
+                  {% else %}
+                    <img src="https://cdn.shopify.com/s/files/1/0724/3035/4681/files/sample_banner01.png?v=1734077658">
+                  {% endif %}
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </li>
+
+        <li class="nav-item active">
+                <a href="#">
+                  <p class="link__text">贈り物の選び方</p>
+                </a>
+        </li>
+      </ul>
+
+      <ul class="custom-header__icon-link">
+        <li>
+          <a href="#st-wishlist-details-button">
+            <img src="{{ 'icon-heart.svg' | asset_url }}">
+            <span>お気に入り</span>
+          </a>
+        </li>
+        <li>
+          <a href="/cart" >
+            <img src="{{ 'icon-cart.svg' | asset_url }}">
+            <span>カート</span>
+          </a>
+        </li>
+        
+        {%- if customer -%}
+          <li>
+            <a href="/account">
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+              <span>マイページ</span>
+            </a>
+          </li>
+          <li>
+            <a href="/account/logout" >
+              <img src="{{ 'icon-logout.svg' | asset_url }}">
+              <span>ログアウト</span>
+            </a>
+          </li>
+        {%- else -%}
+          <li>
+            <a href="/account/register">
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+              <span>新規会員登録</span>
+            </a>
+          </li>
+          <li>
+            <a href="/account/login" >
+              <img src="{{ 'icon-login.svg' | asset_url }}">
+              <span>ログイン</span>
+            </a>
+          </li>
+        {%- endif -%}
+
+      </ul>      
+    </div>
+    
+  </div>
+
+  </div>
+
+
+  <div class="custom-header__box sp">
+      
+    <div class="custom-header wrapper">
+    <h1>
+      <a href="/" class="header__logo">
+        {%- if settings.logo != blank -%}
+              <div class="header__heading-logo-wrapper">
+                {%- assign logo_alt = settings.logo.alt | default: shop.name | escape -%}
+                {%- assign logo_height = settings.logo_width | divided_by: settings.logo.aspect_ratio -%}
+                {% capture sizes %}(max-width: {{ settings.logo_width | times: 2 }}px) 50vw, {{ settings.logo_width }}px{% endcapture %}
+                {% capture widths %}{{ settings.logo_width }}, {{ settings.logo_width | times: 1.5 | round }}, {{ settings.logo_width | times: 2 }}{% endcapture %}
+                {{ settings.logo | image_url: width: 600 | image_tag:
+                  class: 'header__heading-logo motion-reduce',
+                  widths: widths,
+                  height: logo_height,
+                  width: settings.logo_width,
+                  alt: logo_alt,
+                  sizes: sizes,
+                  preload: true
+                }}
+              </div>
+        {%- endif -%}
+      </a>
+    </h1>
+
+    <div class="custom-header__menu">
+
+      <ul class="custom-header__icon-link">
+        
+        {%- if customer -%}
+          <li>
+            <a href="/account">
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+            </a>
+          </li>
+        {%- else -%}
+          <li>
+            <a href="/account/login" >
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+            </a>
+          </li>
+        {%- endif -%}
+
+        <li>
+          <a href="/cart" >
+            <img src="{{ 'icon-cart.svg' | asset_url }}">
+          </a>
+        </li>
+
+        <li>
+          <div class="open-menu-icon" id="open-menu"><span></span></div>
+        </li>
+        
+      </ul>      
+    </div>
+
+    </div>
+    
+  </div>
+
+  </div>
+
+  <div class="sp-menu" id="sp-menu">
+      <div class="scroll wrapper">
+      <ul class="custom-header__icon-link">
+        {%- if customer -%}
+          <li>
+            <a href="/account">
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+              <span>マイページ</span>
+            </a>
+          </li>
+          <li>
+            <a href="/account/logout" >
+              <img src="{{ 'icon-logout.svg' | asset_url }}">
+              <span>ログアウト</span>
+            </a>
+          </li>
+        {%- else -%}
+          <li>
+            <a href="/account/login" >
+              <img src="{{ 'icon-login.svg' | asset_url }}">
+              <span>ログイン</span>
+            </a>
+          </li>
+          <li>
+            <a href="/account/register">
+              <img src="{{ 'icon-account.svg' | asset_url }}">
+              <span>新規会員登録</span>
+            </a>
+          </li>
+        {%- endif -%}
+
+        <li>
+          <a href="#st-wishlist-details-button">
+            <img src="{{ 'icon-heart.svg' | asset_url }}">
+            <span>お気に入り</span>
+          </a>
+        </li>
+        <li>
+          <a href="#" >
+            <img src="{{ 'icon-guide.svg' | asset_url }}">
+            <span>ご利用方法</span>
+          </a>
+        </li>
+        
+      </ul>
+
+    <ul class="accordion-menu">
+      <li>
+        <a href="/collections/all">すべての商品</a>
+      </li>
+      
+      <li>
+        <details class="js-accordion">
+          <summary class="js-accordion__title">予算から探す<img src="{{ 'icon-arrow-bottom-b.svg' | asset_url }}"></summary>
+          <ul class="menu-list js-accordion__content">
+          {% for link in linklists[section.settings.main_linklist_01].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </details>
+      </li>
+
+      <li>
+        <details class="js-accordion">
+          <summary class="js-accordion__title">目的から探す<img src="{{ 'icon-arrow-bottom-b.svg' | asset_url }}"></summary>
+          <ul class="menu-list js-accordion__content">
+          {% for link in linklists[section.settings.main_linklist_02].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </details>
+      </li>
+
+      <li>
+        <details class="js-accordion">
+          <summary class="js-accordion__title">種類から探す<img src="{{ 'icon-arrow-bottom-b.svg' | asset_url }}"></summary>
+          <ul class="menu-list js-accordion__content">
+          {% for link in linklists[section.settings.main_linklist_03].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+          </ul>
+        </details>
+      </li>
+      
+    </ul>
+
+      <div class="btn-area">
+        <a class="btns btns--default btns--arrow" href="#">
+          <img src="{{ 'icon-largedelivery.svg' | asset_url }}">大口ご注文ご相談窓口
+        </a>
+      </div>
+
+      <ul class="text-menu">
+          {% for link in linklists[section.settings.main_linklist_04].links %}
+            {% if link.links == blank %}
+              <li class="nav-item active">
+                <a href="{{ link.url }}">
+                  {{link.title}}
+                </a>
+              </li>
+             {% endif %}
+          {% endfor %}
+      </ul>
+
+        </div>
+    </div>
+    
+  </header>
+
+{% schema %}
+{
+  "name": "t:sections.header.name",
+  "class": "section-header",
+  "settings": [
+    {
+      "type": "link_list",
+      "id": "main_linklist_01",
+      "label": "予算から探す",
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist_02",
+      "label": "目的から探す",
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist_03",
+      "label": "種類から探す",
+    },
+    {
+      "type": "link_list",
+      "id": "main_linklist_04",
+      "label": "スマートフォン用",
+    }
+  ],
+  "blocks": [
+  ]
+}
+{% endschema %}

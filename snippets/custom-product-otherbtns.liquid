@@ -1,0 +1,23 @@
+{% comment %}
+  【商品詳細】お気に入り、お問い合わせボタン
+{% endcomment %}
+
+
+<div class="product__otherbtn {% if customer.tags contains settings.customer_tag_msad %}--one{% endif %}">
+  {% comment %}お気に入りボタン{% endcomment %}
+  <div class="wishlist-button-area">
+    <button class='st-wishlist-button btns btns--outline btns--icon' data-type='details' data-handle='{{ product.handle }}'></button>
+  </div>
+
+  {% if customer.tags contains settings.customer_tag_msad %}
+  {% else %}
+    {% comment %}お問い合わせ / 大口注文窓口
+    -- メタフィールド「大口注文相談窓口」がtrueの場合のみ、「大口注文窓口」のボタンを表示
+    {% endcomment %}
+    {% if product.metafields.custom.p_largeorderbtn == true %}
+      <a href="/contact" class="btns btns--outline btns--icon product__otherbtn--contact">大口ご注文窓口</a>
+    {% else %}
+      <a href="#" class="btns btns--outline btns--icon product__otherbtn--contact">お問い合わせ</a>
+    {% endif %}
+  {% endif %}
+</div>
