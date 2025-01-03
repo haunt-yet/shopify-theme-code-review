@@ -144,7 +144,6 @@ function formValidator() {
 
             var faxField = document.getElementById(fax.id);
 
-            // Find the closest form__tel div and append the error under it
             var formTelDiv = faxField.closest('.form__tel');
             if (formTelDiv) {
                 formTelDiv.parentNode.insertBefore(faxErrorElement, formTelDiv.nextSibling);
