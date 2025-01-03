@@ -1,54 +1,34 @@
 {{ 'customer.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'main-register.js' | asset_url }}" defer="defer"></script>
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+  padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
   }
 
   @media screen and (min-width: 750px) {
-    .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
-    }
+  .section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+  }
   }
 {%- endstyle -%}
 
-<!-- <div class="customer register section-{{ section.id }}-padding"> -->
-<div class="register section-{{ section.id }}-padding">
-  <div class="headtitle">
-    <p class="headtitle__en">Member Registration</p>
-    <h1 class="headtitle__title">{{ 'customer.register.title' | t }}</h1>
-  </div>
-
-  <div class="account__systeminfo">
-    <h2 class="account__systeminfo__title">旧システムをご利用の皆さまへ</h2>
-    <p>ダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキストダミーテキスト</p>
-  </div>
-
-  {%- form 'create_customer', novalidate: 'novalidate', class:'h-adr form' -%}
-
-    {%- assign ja__last_name_kana   = "カナ" -%}
-    {%- assign ja__first_name_kana  = "メイ" -%}
-    {%- assign ja__company_name     = "法人名・団体名" -%}
-    {%- assign ja__department_name  = "部署名・店舗名など" -%}
-    {%- assign ja__post_name        = "役職名"  -%}
-    {%- assign ja__zip_code         = "郵便番号"  -%}
-    {%- assign ja__prefecture       = "都道府県"  -%}
-    {%- assign ja__address_city     = "市区町村番地"  -%}
-    {%- assign ja__address_address1 = "建物名・番地"  -%}
-    {%- assign ja__tel              = "電話番号"  -%}
-    {%- assign ja__fax              = "FAX番号"  -%}
-
-    {% comment %}登録時に、一般会員タグを自動付与{% endcomment %}
-    <input type="hidden" id="customer_tags" name="customer[tags]" value="{{ settings.customer_tag_default }}"/>
-    <input type="hidden" class="p-country-name" value="Japan">
-    
+<div class="customer register section-{{ section.id }}-padding">
+  <h1>
+    {{ 'customer.register.title' | t }}
+  </h1>
+  {%- form 'create_customer', novalidate: 'novalidate' -%}
     {%- if form.errors -%}
-      <ul class="reset--list">
+      <h2 class="form__message" tabindex="-1" autofocus>
+        <span class="svg-wrapper">
+          {{- 'icon-error.svg' | inline_asset_content -}}
+        </span>
+        {{ 'templates.contact.form.error_heading' | t }}
+      </h2>
+      <ul>
         {%- for field in form.errors -%}
-          <li class="form__box__errorbox">
+          <li>
             {%- if field == 'form' -%}
               {{ form.errors.messages[field] }}
             {%- else -%}
@@ -61,535 +41,98 @@
         {%- endfor -%}
       </ul>
     {%- endif -%}
-
-
-    <div class="form__inner">
-      <div class="form__two">
-        {% comment %} 姓 {% endcomment %}
-        <fieldset class="form__box form__text">
-          <legend class="form__title">{{ 'customer.register.last_name' | t }}<span>必須</span></legend>
-          <input
-            type="text"
-            name="customer[last_name]"
-            id="RegisterForm-LastName"
-            {% if form.last_name %}
-              value="{{ form.last_name }}"
-            {% endif %}
-            autocomplete="family-name"
-            required
-            {% if form.errors contains 'last_name' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-last_name-error"
-            {% endif %}
-            class="{% if form.errors contains 'last_name' %}form__box__error{% endif %}"
-          >
-          <!-- {% if form.errors contains 'last_name' %}
-            <p class="form__box__errortext" id="RegisterForm-last_name-error">「{{ 'customer.register.last_name' | t }}」を入力してください。</p>
-          {% endif %} -->
-        </fieldset>
-
-        {% comment %} 名 {% endcomment %}
-        <fieldset class="form__box form__text">
-          <legend class="form__title">{{ 'customer.register.first_name' | t }}<span>必須</span></legend>
-          <input
-            type="text"
-            name="customer[first_name]"
-            id="RegisterForm-FirstName"
-            {% if form.first_name %}
-              value="{{ form.first_name }}"
-            {% endif %}
-            autocomplete="given-name"
-            required
-            {% if form.errors contains 'first_name' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-first_name-error"
-            {% endif %}
-            class="{% if form.errors contains 'first_name' %}form__box__error{% endif %}"
-          >
-          <!-- {% if form.errors contains 'first_name' %}
-            <p class="form__box__errortext" id="RegisterForm-first_name-error">「{{ 'customer.register.first_name' | t }}」を入力してください。</p>
-          {% endif %} -->
-        </fieldset>
-      </div>
-
-      <div class="form__two">
-        {% comment %} セイ {% endcomment %}
-        <fieldset class="form__box form__text">
-          <legend class="form__title">{{ ja__last_name_kana }}<span>必須</span></legend>
-          <input
-            type="text"
-            name="customer[note][last_name_kana]"
-            id="RegisterForm-LastNameKana"
-            {% if form.last_name_kana %}
-              value="{{ form.last_name_kana }}"
-            {% endif %}
-            autocomplete="last-name-kana"
-            autocomplete="family-name"
-            required
-            {% if form.errors contains 'last_name_kana' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-last_name_kana-error"
-            {% endif %}
-            class="{% if form.errors contains 'last_name_kana' %}form__box__error{% endif %}"
-          >
-          <!-- {% if form.errors contains 'last_name_kana' %}
-            <p class="form__box__errortext" id="RegisterForm-last_name_kana-error">「{{ ja__last_name_kana }}」を入力してください。</p>
-          {% endif %} -->
-        </fieldset>
-
-        {% comment %} メイ {% endcomment %}
-        <fieldset class="form__box form__text">
-          <legend class="form__title">{{ ja__first_name_kana }}<span>必須</span></legend>
-          <input
-            type="text"
-            name="customer[note][first_name_kana]"
-            id="RegisterForm-FirstNameKana"
-            {% if form.first_name_kana %}
-              value="{{ form.first_name_kana }}"
-            {% endif %}
-            autocomplete="first-name-kana"
-            required
-            {% if form.errors contains 'first_name_kana' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-first_name_kana-error"
-            {% endif %}
-            class="{% if form.errors contains 'first_name_kana' %}form__box__error{% endif %}"
-          >
-          <p class="form__box__errortext" id="RegisterForm-first_name_kana-error"></p>
-          <!-- {% if form.errors contains 'first_name_kana' %}
-            <p class="form__box__errortext" id="RegisterForm-first_name_kana-error">「{{ ja__first_name_kana }}」を入力してください。</p>
-          {% endif %} -->
-        </fieldset>
-      </div>
-
-      {% comment %} 法人名・団体名 {% endcomment %}
-      <fieldset class="form__box form__text mt-m">
-        <legend class="form__title">{{ ja__company_name }}</legend>
-        <input
-          type="text"
-          name="customer[note][company_name]"
-          id="RegisterForm-CompanyName"
-          {% if form.company_name %}
-            value="{{ form.company_name }}"
-          {% endif %}
-          autocomplete="company_name"
-          {% if form.errors contains 'company_name' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-company_name-error"
-          {% endif %}
-          class="{% if form.errors contains 'company_name' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'company_name' %}
-          <p class="form__box__errortext" id="RegisterForm-company_name-error">「{{ ja__company_name }}」を入力してください。</p>
-        {% endif %}
-      </fieldset>
-
-      {% comment %} 法人名・団体名（カナ） {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__company_name }}（カナ）</legend>
-        <input
-          type="text"
-          name="customer[note][company_name_kana]"
-          id="RegisterForm-CompanyNameKana"
-          {% if form.company_name_kana %}
-            value="{{ form.company_name_kana }}"
-          {% endif %}
-          autocomplete="company_name_kana"
-          {% if form.errors contains 'company_name_kana' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-company_name_kana-error"
-          {% endif %}
-          class="{% if form.errors contains 'company_name_kana' %}form__box__error{% endif %}"
-        >
-        <!-- {% if form.errors contains 'company_name_kana' %}
-          <p class="form__box__errortext" id="RegisterForm-company_name_kana-error">「{{ ja__company_name }}（カナ）」を入力してください。</p>
-        {% endif %} -->
-      </fieldset>
-
-      {% comment %} 部署名・店舗名など {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__department_name }}</legend>
-        <input
-          type="text"
-          name="customer[note][department_name]"
-          id="RegisterForm-DepartmentName"
-          {% if form.department_name %}
-            value="{{ form.department_name }}"
-          {% endif %}
-          autocomplete="department_name"
-          {% if form.errors contains 'department_name' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-department_name-error"
-          {% endif %}
-          class="{% if form.errors contains 'department_name' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'department_name' %}
-          <p class="form__box__errortext" id="RegisterForm-department_name-error">「{{ ja__department_name }}」を入力してください。</p>
-        {% endif %}
-      </fieldset>
-
-      {% comment %} 役職名 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__post_name }}</legend>
-        <input
-          type="text"
-          name="customer[note][post_name]"
-          id="RegisterForm-PostName"
-          {% if form.post_name %}
-            value="{{ form.post_name }}"
-          {% endif %}
-          autocomplete="post_name"
-          {% if form.errors contains 'post_name' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-post_name-error"
-          {% endif %}
-          class="{% if form.errors contains 'post_name' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'post_name' %}
-          <p class="form__box__errortext" id="RegisterForm-post_name-error">「{{ ja__post_name }}」を入力してください。</p>
-        {% endif %}
-      </fieldset>
-
-      {% comment %} 郵便番号 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__zip_code }}<span>必須</span></legend>
-        <div class="form__zip">
-          <input
-            type="text"
-            name="customer[note][zip_code1]"
-            id="RegisterForm-ZipCode1"
-            {% if form.zip_code1 %}
-              value="{{ form.zip_code1 }}"
-            {% endif %}
-            autocomplete="zip_code1"
-            size="3"
-            maxlength="3"
-            {% if form.errors contains 'zip_code1' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-zip_code-error"
-            {% endif %}
-            class="p-postal-code {% if form.errors contains 'zip_code1' %}form__box__error{% endif %}"
-          >
-
-          <input
-            type="text"
-            name="customer[note][zip_code2]"
-            id="RegisterForm-ZipCode2"
-            {% if form.zip_code2 %}
-              value="{{ form.zip_code2 }}"
-            {% endif %}
-            autocomplete="zip_code2"
-            size="4"
-            maxlength="4"
-            {% if form.errors contains 'zip_code2' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-zip_code-error"
-            {% endif %}
-            class="p-postal-code {% if form.errors contains 'zip_code2' %}form__box__error{% endif %}"
-          >
-        </div>
-        <!-- {% if form.errors contains 'zip_code1' %}
-          <p class="form__box__errortext" id="RegisterForm-zip_code-error">「{{ ja__zip_code }}」を入力してください。</p>
-        {% endif %} -->
-      </fieldset>
-
-      {% comment %} 都道府県 {% endcomment %}
-      <fieldset class="form__box form__select">
-        <legend class="form__title">{{ ja__prefecture }}<span>必須</span></legend>
-        <div class="form__selectbox">
-          <select
-            name="customer[note][prefecture]"
-            id="RegisterForm-Prefecture"
-            {% if form.errors contains 'prefecture' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-prefecture-error"
-            {% endif %}
-            class="p-region  {% if form.errors contains 'prefecture' %}form__box__error{% endif %}"
-          >
-            <option value="" selected>選択してください</option>
-            <option value="北海道">北海道</option>
-            <option value="青森県">青森県</option>
-            <option value="岩手県">岩手県</option>
-            <option value="宮城県">宮城県</option>
-            <option value="秋田県">秋田県</option>
-            <option value="山形県">山形県</option>
-            <option value="福島県">福島県</option>
-            <option value="茨城県">茨城県</option>
-            <option value="栃木県">栃木県</option>
-            <option value="群馬県">群馬県</option>
-            <option value="埼玉県">埼玉県</option>
-            <option value="千葉県">千葉県</option>
-            <option value="東京都">東京都</option>
-            <option value="神奈川県">神奈川県</option>
-            <option value="新潟県">新潟県</option>
-            <option value="富山県">富山県</option>
-            <option value="石川県">石川県</option>
-            <option value="福井県">福井県</option>
-            <option value="山梨県">山梨県</option>
-            <option value="長野県">長野県</option>
-            <option value="岐阜県">岐阜県</option>
-            <option value="静岡県">静岡県</option>
-            <option value="愛知県">愛知県</option>
-            <option value="三重県">三重県</option>
-            <option value="滋賀県">滋賀県</option>
-            <option value="京都府">京都府</option>
-            <option value="大阪府">大阪府</option>
-            <option value="兵庫県">兵庫県</option>
-            <option value="奈良県">奈良県</option>
-            <option value="和歌山県">和歌山県</option>
-            <option value="鳥取県">鳥取県</option>
-            <option value="島根県">島根県</option>
-            <option value="岡山県">岡山県</option>
-            <option value="広島県">広島県</option>
-            <option value="山口県">山口県</option>
-            <option value="徳島県">徳島県</option>
-            <option value="香川県">香川県</option>
-            <option value="愛媛県">愛媛県</option>
-            <option value="高知県">高知県</option>
-            <option value="福岡県">福岡県</option>
-            <option value="佐賀県">佐賀県</option>
-            <option value="長崎県">長崎県</option>
-            <option value="熊本県">熊本県</option>
-            <option value="大分県">大分県</option>
-            <option value="宮崎県">宮崎県</option>
-            <option value="鹿児島県">鹿児島県</option>
-            <option value="沖縄県">沖縄県</option>
-          </select>
-        </div>
-        <!-- {% if form.errors contains 'prefecture' %}
-          <p class="form__box__errortext" id="RegisterForm-prefecture-error">「{{ ja__prefecture }}」を選択してください。</p>
-        {% endif %} -->
-      </fieldset>
-
-      {% comment %} 市区町村番地 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__address_city }}<span>必須</span></legend>
-        <input
-          type="text"
-          name="customer[note][address_city]"
-          id="RegisterForm-City"
-          {% if form.address_city %}
-            value="{{ form.address_city }}"
-          {% endif %}
-          autocomplete="address_city"
-          required
-          {% if form.errors contains 'address_city' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-address_city-error"
-          {% endif %}
-          class="p-locality p-street-address {% if form.errors contains 'address_city' %}form__box__error{% endif %}"
-        >
-        <!-- {% if form.errors contains 'address_city' %}
-          <p class="form__box__errortext" id="RegisterForm-address_city-error">「{{ ja__address_city }}」を入力してください。</p>
-        {% endif %} -->
-      </fieldset>
-
-      {% comment %} 建物名・番地 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__address_address1 }}</legend>
-        <input
-          type="text"
-          name="customer[note][address_address1]"
-          id="RegisterForm-Address1"
-          {% if form.address_address1 %}
-            value="{{ form.address_address1 }}"
-          {% endif %}
-          autocomplete="address_address1"
-          {% if form.errors contains 'address_address1' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-address_address1-error"
-          {% endif %}
-          class="{% if form.errors contains 'address_address1' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'address_address1' %}
-          <p class="form__box__errortext" id="RegisterForm-address_address1-error">「{{ ja__address_address1 }}」を入力してください。</p>
-        {% endif %}
-      </fieldset>
-
-      {% comment %} 電話番号 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__tel }}<span>必須</span></legend>
-        <div class="form__tel">
-          <input
-            type="text"
-            name="customer[note][customer_tel1]"
-            id="RegisterForm-CustomerTel1"
-            {% if form.customer_tel1 %}
-              value="{{ form.customer_tel1 }}"
-            {% endif %}
-            autocomplete="customer_tel1"
-            {% if form.errors contains 'customer_tel1' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_tel-error"
-            {% endif %}
-          >
-
-          <input
-            type="text"
-            name="customer[note][customer_tel2]"
-            id="RegisterForm-CustomerTel2"
-            {% if form.customer_tel2 %}
-              value="{{ form.customer_tel2 }}"
-            {% endif %}
-            autocomplete="customer_tel2"
-            {% if form.errors contains 'customer_tel2' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_tel-error"
-            {% endif %}
-          >
-
-          <input
-            type="text"
-            name="customer[note][customer_tel3]"
-            id="RegisterForm-CustomerTel3"
-            {% if form.customer_tel3 %}
-              value="{{ form.customer_tel3 }}"
-            {% endif %}
-            autocomplete="customer_tel3"
-            {% if form.errors contains 'customer_tel3' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_tel-error"
-            {% endif %}
-          >        
-        </div>
-            <!-- <p class="form__box__errortext" id="RegisterForm-customer_tel-error" style="display: none;">「{{ ja__tel }}」を入力してください。</p> -->
-      </fieldset>
-
-      {% comment %} FAX番号 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ ja__fax }}</legend>
-        <div class="form__tel">
-          <input
-            type="text"
-            name="customer[note][customer_fax1]"
-            id="RegisterForm-CustomerFax1"
-            {% if form.customer_fax1 %}
-              value="{{ form.customer_fax1 }}"
-            {% endif %}
-            autocomplete="customer_fax1"
-            {% if form.errors contains 'customer_fax1' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_fax-error"
-            {% endif %}
-          >
-
-          <input
-            type="text"
-            name="customer[note][customer_fax2]"
-            id="RegisterForm-CustomerFax2"
-            {% if form.customer_fax2 %}
-              value="{{ form.customer_fax2 }}"
-            {% endif %}
-            autocomplete="customer_fax2"
-            {% if form.errors contains 'customer_fax2' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_fax-error"
-            {% endif %}
-          >
-
-          <input
-            type="text"
-            name="customer[note][customer_fax3]"
-            id="RegisterForm-CustomerFax3"
-            {% if form.customer_fax3 %}
-              value="{{ form.customer_fax3 }}"
-            {% endif %}
-            autocomplete="customer_fax3"
-            {% if form.errors contains 'customer_fax3' %}
-              aria-invalid="true"
-              aria-describedby="RegisterForm-customer_fax-error"
-            {% endif %}
-          >     
-        </div>
-          <!-- <p class="form__box__errortext" id="RegisterForm-customer_fax-error" style="display: none;">「{{ ja__tel }}」を入力してください。</p> -->
-      </fieldset>
-
-      {% comment %} メールアドレス {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ 'customer.register.email' | t }}<span>必須</span></legend>
-        <input
-          type="email"
-          name="customer[email]"
-          id="RegisterForm-email"
-          {% if form.email %}
-            value="{{ form.email | default: '' }}"
-          {% endif %}
-          spellcheck="false"
-          autocapitalize="off"
-          autocomplete="email"
-          aria-required="true"
-          {% if form.errors contains 'email' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-email-error"
-          {% endif %}
-          class="{% if form.errors contains 'email' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'email' %}
-          <p class="form__box__errortext" id="RegisterForm-email-error">{{ form.errors.translated_fields.email | capitalize }}{{ form.errors.messages.email }}</p>
-        {% endif %}
-        <ul class="attention">
-          <li>@exsample.comからのメール受信許可をお願いします。</li>
-        </ul>
-      </fieldset>
-
-      {% comment %} パスワード {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ 'customer.register.password' | t }}<span>必須</span></legend>
-        <input
-          type="password"
-          name="customer[password]"
-          id="RegisterForm-password"
-          aria-required="true"
-          {% if form.errors contains 'password' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-password-error"
-          {% endif %}
-          class="{% if form.errors contains 'password' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'password' %}
-          <p class="form__box__errortext" id="RegisterForm-password-error">{{ form.errors.translated_fields.password | capitalize }}{{ form.errors.messages.password }}</p>
-        {% endif %}
-        <ul class="attention">
-          <li>X文字以上</li>
-        </ul>
-      </fieldset>
-
-      {% comment %} パスワード確認 {% endcomment %}
-      <fieldset class="form__box form__text">
-        <legend class="form__title">{{ 'customer.register.password' | t }}確認<span>必須</span></legend>
-        <input
-          type="password"
-          name="customer[password_confirm]"
-          id="RegisterForm-passwordConfirm"
-          aria-required="true"
-          {% if form.errors contains 'password_confirm' %}
-            aria-invalid="true"
-            aria-describedby="RegisterForm-password_confirm-error"
-          {% endif %}
-          class="{% if form.errors contains 'password_confirm' %}form__box__error{% endif %}"
-        >
-        {% if form.errors contains 'password_confirm' %}
-          <p class="form__box__errortext" id="RegisterForm-password_confirm-error">{{ form.errors.translated_fields.password | capitalize }}確認{{ form.errors.messages.password }}</p>
-        {% endif %}
-      </fieldset>
-
-      {% comment %} 贈答の窓口からのお知らせを受け取る {% endcomment %}
-      <fieldset class="form__box form__check">
-        <label for="accepts-marketing">
-          <input type="checkbox" name="customer[accepts_marketing]" id="accepts-marketing" checked/>顧客の窓口からのお知らせを受け取る
-        </label>
-      </fieldset>  
-
-      <p class="form__lasttext"><a href="/policies/terms-of-service" target="_blank">利用規約</a>および<a href="/policies/privacy-policy" target="_blank">プライバシーポリシー</a>を必ずご確認ください。</p>
-
-      <button class="btns btns--default btns--arrow form__btn">上記に同意して登録</button>
-
-   </div>    
-    
-    
+    <div class="field">
+      <input
+              type="text"
+              name="customer[first_name]"
+              id="RegisterForm-FirstName"
+              {% if form.first_name %}
+                value="{{ form.first_name }}"
+              {% endif %}
+              autocomplete="given-name"
+              placeholder="{{ 'customer.register.first_name' | t }}"
+      >
+      <label for="RegisterForm-FirstName">
+        {{ 'customer.register.first_name' | t }}
+      </label>
+    </div>
+    <div class="field">
+      <input
+              type="text"
+              name="customer[last_name]"
+              id="RegisterForm-LastName"
+              {% if form.last_name %}
+                value="{{ form.last_name }}"
+              {% endif %}
+              autocomplete="family-name"
+              placeholder="{{ 'customer.register.last_name' | t }}"
+      >
+      <label for="RegisterForm-LastName">
+        {{ 'customer.register.last_name' | t }}
+      </label>
+    </div>
+    <div class="field">
+      <input
+              type="email"
+              name="customer[email]"
+              id="RegisterForm-email"
+              {% if form.email %}
+                value="{{ form.email }}"
+              {% endif %}
+              spellcheck="false"
+              autocapitalize="off"
+              autocomplete="email"
+              aria-required="true"
+              {% if form.errors contains 'email' %}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-email-error"
+              {% endif %}
+              placeholder="{{ 'customer.register.email' | t }}"
+      >
+      <label for="RegisterForm-email">
+        {{ 'customer.register.email' | t }}
+      </label>
+    </div>
+    {%- if form.errors contains 'email' -%}
+      <span id="RegisterForm-email-error" class="form__message">
+        <span class="svg-wrapper">
+          {{- 'icon-error.svg' | inline_asset_content -}}
+        </span>
+        {{ form.errors.translated_fields.email | capitalize }}
+        {{ form.errors.messages.email }}.
+      </span>
+    {%- endif -%}
+    <div class="field">
+      <input
+              type="password"
+              name="customer[password]"
+              id="RegisterForm-password"
+              aria-required="true"
+              {% if form.errors contains 'password' %}
+                aria-invalid="true"
+                aria-describedby="RegisterForm-password-error"
+              {% endif %}
+              placeholder="{{ 'customer.register.password' | t }}"
+      >
+      <label for="RegisterForm-password">
+        {{ 'customer.register.password' | t }}
+      </label>
+    </div>
+    {%- if form.errors contains 'password' -%}
+      <span id="RegisterForm-password-error" class="form__message">
+        <span class="svg-wrapper">
+          {{- 'icon-error.svg' | inline_asset_content -}}
+        </span>
+        {{ form.errors.translated_fields.password | capitalize }}
+        {{ form.errors.messages.password }}.
+      </span>
+    {%- endif -%}
+    <button>
+      {{ 'customer.register.submit' | t }}
+    </button>
   {%- endform -%}
 </div>
-<div id="error-container"></div>
+
 {% schema %}
 {
   "name": "t:sections.main-register.name",
@@ -621,5 +164,3 @@
   ]
 }
 {% endschema %}
-
-<script src="https://yubinbango.github.io/yubinbango/yubinbango.js" charset="UTF-8"></script>
