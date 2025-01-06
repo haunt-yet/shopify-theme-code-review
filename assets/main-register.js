@@ -14,7 +14,7 @@ const validations = {
 };
 
 const fieldNameMap = {
-    'RegisterForm-CustomerTel1': '「電話番号1」',
+    'RegisterForm-CustomerTel1': '「電話番号1」1',
     'RegisterForm-CustomerTel2': '「電話番号2」',
     'RegisterForm-CustomerTel3': '「電話番号3」',
     'RegisterForm-LastName': '「姓」',
