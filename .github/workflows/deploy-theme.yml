@@ -18,15 +18,24 @@ jobs:
       - name: Install Shopify CLI
         run: npm install -g @shopify/cli
 
+      - name: Install expect
+        run: sudo apt-get install -y expect
+
       - name: Upload theme
         env:
-          SHOPIFY_CLI_NO_INTERACTIVE: 1
+          SHOPIFY_FLAG_FORCE: 1
           SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_STORE }}
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
         run: |
-          shopify theme push \
+          expect << 'END'
+          spawn shopify theme push \
             --json \
             --theme 132674551923 \
             --store ${{ secrets.SHOPIFY_STORE }} \
-            --password ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
-            --force
+            --password ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }} \
+            --live
+          expect "No"
+          send "\033\[A"    ;# Gửi phím mũi tên lên
+          send "\r"         ;# Gửi Enter
+          expect eof
+          END
