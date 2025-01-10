@@ -20,7 +20,7 @@ jobs:
 
       - name: Upload theme
         env:
-          SHOPIFY_FLAG_FORCE: true
+          SHOPIFY_FLAG_FORCE: 1
           SHOPIFY_FLAG_STORE: ${{ secrets.SHOPIFY_STORE }}
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
         run: |
