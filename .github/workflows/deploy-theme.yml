@@ -27,4 +27,6 @@ jobs:
           shopify theme push \
             --json \
             --theme 132674551923 \
-            --password $SHOPIFY_CLI_THEME_TOKEN
+            --store ${{ secrets.SHOPIFY_STORE }} \
+            --password ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
+            --force
