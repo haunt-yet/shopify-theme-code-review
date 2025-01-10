@@ -35,7 +35,7 @@ jobs:
             --password ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }} \
             --live
           expect "No"
-          send \033\[A
-          send \r
+          send -- "\[A"
+          send -- "\r"
           expect eof
           END
