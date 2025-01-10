@@ -753,7 +753,3 @@ li[data-address] > h2 {
 .addresses form > div:nth-of-type(7) + div[id] {
   margin-top: 1.5rem;
 }
-
-.form__box__errortext {
-    display: none;
-}

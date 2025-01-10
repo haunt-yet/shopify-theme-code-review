@@ -1,4 +1,4 @@
-{% render 'custom-redirect' %}
+{{ 'customer.css' | asset_url | stylesheet_tag }}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
@@ -14,52 +14,74 @@
   }
 {%- endstyle -%}
 
-<div class="account mypageTop section-{{ section.id }}-padding">
+<div class="customer account section-{{ section.id }}-padding">
+  <div>
+    <h1 class="customer__title">{{ 'customer.account.title' | t }}</h1>
+    <a href="{{ routes.account_logout_url }}">
+      <span class="svg-wrapper">
+        {{- 'icon-account.svg' | inline_asset_content -}}
+      </span>
+      {{ 'customer.log_out' | t }}
+    </a>
+  </div>
 
-  {% assign title = 'customer.account.title' | t %}
-  {% render 'custom-mypage-head',
-    title: title,
-    subtitle: 'Mypage',
-    backbtn: 'no',
-  %}
+  <div>
+    <div>
+      <h2>{{ 'customer.orders.title' | t }}</h2>
 
-  <div class="mp__twocolumn">
-    <aside class="mp__sidemenu">
-      <div class="mp__sidemenu__title">Menu</div>
-      <ul class="reset--list mp__sidemenu__list">
-        <li><a href="#">注文履歴</a></li>
-        <li><a href="/account/addresses">アカウント情報</a></li>
-        <li><a href="/account?view=plate">立札情報</a></li>
-        <li><a href="/account?view=reminder">イベントリマインダー</a></li>
-        <li><a href="/pages/faq">よくあるご質問</a></li>
-        <li><a href="/pages/contact">お問い合わせ</a></li>
-      </ul>
-    </aside>
-
-    <div class="mp__rightcnt">
-      {% comment %} 注文履歴{% endcomment %}
-      <h2 class="mp__title">{{ 'customer.orders.title' | t }}</h2>
-
-      {% paginate customer.orders by 50 %}
+      {% paginate customer.orders by 20 %}
         {%- if customer.orders.size > 0 -%}
-          <table class="mp__ordertable">
-            <thead>
-              <tr>
-                <th class="tx-l">注文番号</th>
-                <th class="tx-l">注文日</th>
-                <th>支払い状況</th>
-                <th>発送状況</th>
-                <th class="tx-r">合計</th>
+          <table role="table" class="order-history">
+            <caption class="visually-hidden">
+              {{ 'customer.orders.title' | t }}
+            </caption>
+            <thead role="rowgroup">
+              <tr role="row">
+                <th id="ColumnOrder" scope="col" role="columnheader">{{ 'customer.orders.order_number' | t }}</th>
+                <th id="ColumnDate" scope="col" role="columnheader">{{ 'customer.orders.date' | t }}</th>
+                <th id="ColumnPayment" scope="col" role="columnheader">{{ 'customer.orders.payment_status' | t }}</th>
+                <th id="ColumnFulfillment" scope="col" role="columnheader">
+                  {{ 'customer.orders.fulfillment_status' | t }}
+                </th>
+                <th id="ColumnTotal" scope="col" role="columnheader">{{ 'customer.orders.total' | t }}</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody role="rowgroup">
               {%- for order in customer.orders -%}
-                <tr>
-                  <td class="td__ordernum"><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
-                  <td>{{ order.created_at | time_tag: format: 'date' }}</td>
-                  <td class="td__label tx-ce"><span {% if order.financial_status == 'paid' %}class="fin"{% endif %}>{{ order.financial_status_label }}</span></td>
-                  <td class="td__label tx-ce"><span {% if order.fulfillment_status == 'fulfilled' %}class="fin"{% endif %}>{{ order.fulfillment_status_label }}</span></td>
-                  <td class="td__orderamount tx-r">￥{{ order.total_net_amount | money_with_currency }}</td>
+                <tr role="row">
+                  <td
+                    id="RowOrder"
+                    role="cell"
+                    headers="ColumnOrder"
+                    data-label="{{ 'customer.orders.order_number' | t }}"
+                  >
+                    <a
+                      href="{{ order.customer_url }}"
+                      aria-label="{{ 'customer.orders.order_number_link' | t: number: order.name }}"
+                    >
+                      {{ order.name }}
+                    </a>
+                  </td>
+                  <td headers="RowOrder ColumnDate" role="cell" data-label="{{ 'customer.orders.date' | t }}">
+                    {{ order.created_at | time_tag: format: 'date' }}
+                  </td>
+                  <td
+                    headers="RowOrder ColumnPayment"
+                    role="cell"
+                    data-label="{{ 'customer.orders.payment_status' | t }}"
+                  >
+                    {{ order.financial_status_label }}
+                  </td>
+                  <td
+                    headers="RowOrder ColumnFulfillment"
+                    role="cell"
+                    data-label="{{ 'customer.orders.fulfillment_status' | t }}"
+                  >
+                    {{ order.fulfillment_status_label }}
+                  </td>
+                  <td headers="RowOrder ColumnTotal" role="cell" data-label="{{ 'customer.orders.total' | t }}">
+                    {{ order.total_net_amount | money_with_currency }}
+                  </td>
                 </tr>
               {%- endfor -%}
             </tbody>
@@ -114,9 +136,18 @@
           {%- endif -%}
         {%- endif -%}
       {% endpaginate %}
+    </div>
 
-</div><!-- ./c__rightcnt -->
-  </div><!-- ./c__twocolumn -->
+    <div>
+      <h2>{{ 'customer.account.details' | t }}</h2>
+
+      {{ customer.default_address | format_address }}
+
+      <a href="{{ routes.account_addresses_url }}">
+        {{ 'customer.account.view_addresses' | t }} ({{ customer.addresses_count }})
+      </a>
+    </div>
+  </div>
 </div>
 
 {% schema %}
@@ -150,9 +181,3 @@
   ]
 }
 {% endschema %}
-
-<div id="eventreminder">
-  {% render 'event-reminder', user_key: customer.metafields.custom.user_key.value %}
-</div>
-{{ 'event-reminder.css' | asset_url | stylesheet_tag }}
-<script src="{{ 'event-reminder.js' | asset_url }}" defer="defer"></script>

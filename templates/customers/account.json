@@ -1,1 +1,14 @@
-{"sections":{"main":{"type":"main-account","settings":{"padding_top":0,"padding_bottom":0}},"1732872211b7447d55":{"type":"apps","settings":{"include_margins":true}}},"order":["main","1732872211b7447d55"]}
+{
+  "sections": {
+    "main": {
+      "type": "main-account",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

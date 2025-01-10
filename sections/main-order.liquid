@@ -14,56 +14,11 @@
   }
 {%- endstyle -%}
 
-<div class="order section-{{ section.id }}-padding">
-  {% assign title = 'customer.account.title' | t %}
-  {% render 'custom-mypage-head',
-    title: title,
-    title: '注文履歴',
-    subtitle: 'Purchase History'
-  %}
-
-  <section class="mypurchase__info">
-    <h2 class="mp__title">注文({{ order.name }})</h2>
-    <table class="mp__ordertable">
-      <thead>
-        <tr>
-          <th class="tx-l">注文番号</th>
-          <th class="tx-l">支払い方法</th>
-          <th class="tx-l">配送方法</th>
-          <th class="tx-l">お届け希望日</th>
-          <th class="tx-l">お届け希望時間</th>
-          <th class="tx-r">注文合計金額</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="td__ordernum"><a href="{{ order.customer_url }}">{{ order.name }}</a></td>
-          <td class="td__label tx-ce">
-            <span {% if order.financial_status == 'paid' %}class="fin"{% endif %}>{{ order.financial_status_label }}</span>
-            {% for payment_gateway in order.payment_gateway_names %}
-              {{ payment_gateway }}
-            {% endfor %}
-          </td>
-          <td class="td__label tx-ce">
-            <span {% if order.fulfillment_status == 'fulfilled' %}class="fin"{% endif %}>{{ order.fulfillment_status_label }}</span>
-            {{ order.shipping_methods.title }}
-            {% for aaa in order.shipping_methods %}
-              {{ aaa.title }}
-              
-            {% endfor %}
-          </td>
-          <td>2024年12月1日(火)</td>
-          <td>午前中</td>
-          <td class="td__orderamount tx-r">￥{{ order.total_net_amount | money_with_currency }}</td>
-        </tr>
-      </tbody>
-    </table>
-    <ul class="attention">
-      <li>お届け希望時間につきましては、交通渋滞、物流の増加や天候によりご希望に添えない場合がございます。<br>
-        宅配の場合は宅配番号を記載しておりますので、お客様ご自身にて追跡をお願い致します。<br>
-        また配達状況についてはお答えできかねますので、お客様ご自身にて各宅配業者へお問い合わせください。</li>
-    </ul>
-  </section>
+<div class="customer order section-{{ section.id }}-padding">
+  <div>
+    <h1 class="customer__title">{{ 'customer.account.title' | t }}</h1>
+    <a href="{{ routes.account_url }}">{{ 'customer.account.return' | t }}</a>
+  </div>
 
   <div>
     <div>

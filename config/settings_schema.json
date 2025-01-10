@@ -8,21 +8,6 @@
     "theme_support_url": "https://support.shopify.com/"
   },
   {
-    "name": "顧客タグ",
-    "settings": [
-      {
-        "type": "text",
-        "id": "customer_tag_msad",
-        "label": "MS&AD"
-      },
-      {
-        "type": "text",
-        "id": "customer_tag_default",
-        "label": "一般会員"
-      }
-    ]
-  },
-  {
     "name": "t:settings_schema.logo.name",
     "settings": [
       {

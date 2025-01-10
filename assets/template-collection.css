@@ -97,3 +97,7 @@
 .collection__view-all a:not(.link) {
   margin-top: 1rem;
 }
+
+#Details-filter.p.tag-template--16565835563123__product-grid {
+    display: none !important;
+  }

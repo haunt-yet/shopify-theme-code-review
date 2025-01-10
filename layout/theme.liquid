@@ -7,8 +7,6 @@
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
 
-    <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-
     {%- if settings.favicon != blank -%}
       <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
     {%- endif -%}
@@ -30,11 +28,6 @@
 
     {% render 'meta-tags' %}
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-      const userKey = "{{ customer.metafields.custom.user_key.value }}";
-    </script>
-    
     <script src="{{ 'constants.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'pubsub.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'global.js' | asset_url }}" defer="defer"></script>
@@ -303,43 +296,16 @@
         document.documentElement.classList.add('shopify-design-mode');
       }
     </script>
-
     {% comment %}
-      flatpickr added by tezuka-k at 20241120
-    {% endcomment %}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-　　<script src="https://cdn.jsdelivr.net/npm/flatpickr" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js" defer></script>
-
-    {% comment %}
-    ----------------------------
-    追加
-    ----------------------------
-    {% endcomment %}
-    {{ 'custom-common.css' | asset_url | stylesheet_tag: preload: true }}
-    {% if request.path contains '/account' %}
-      {{ 'custom-account.css' | asset_url | stylesheet_tag: preload: true }}
-    {% else %}
-      {{ 'custom-front.css' | asset_url | stylesheet_tag: preload: true }}
-    {% endif %}
-    {% comment %}./追加{% endcomment %}
-    {% comment %}hau - filter product by customer tag{% endcomment %}
-    {% comment %}
-    {% if template == 'collection' %}
+      {% if template == 'collection' %}
         {{ 'collection-customer-tag.css' | asset_url | stylesheet_tag }}
         <script src="{{ 'collection-customer-tag.js' | asset_url }}" defer="defer"></script>
     {% endif %}
     {% endcomment %}
-
+    
   </head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
-    {% comment %} 佐々木テスト中
-    {% if template == 'index' %} 
-      {% render 'custom-loading' %}
-    {% endif %}
-    {% endcomment %}
-    
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
@@ -350,65 +316,8 @@
 
     {% sections 'header-group' %}
 
-    {% comment %}
-    ----------------------------------------------
-    サイドメニュー表示
-    ・商品詳細
-    ・商品一覧
-    ----------------------------------------------
-    {% endcomment %}
-    {% if template == 'index' %}
-      {% assign body_id = 'front-page' %}
-    {% elsif request.path contains '/products' %}
-      {% assign body_id = 'products' %}
-    {% elsif handle %}
-      {% assign body_id = handle %}
-    {% else %}
-      {% assign body_id = 'other' %}
-    {% endif %}
     <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
-      <div class="wrapper" id="{{ body_id | escape }}">
-        {% if request.path contains '/collections' or request.path contains '/products' %}
-          <div class="wrapper__twogrid">
-            <aside class="sidebar sp__inner">
-              {% sections 'custom-sidebar' %}
-            </aside>
-            <div class="maincontent">
-              {{ content_for_layout }}  
-            </div>
-          </div>
-    
-          <style>
-            .maincontent .page-width {
-              padding: 0;
-            }
-            .wrapper__twogrid {
-                display: grid;
-            }
-            @media (min-width: 990px){
-              .wrapper__twogrid {
-                display: grid;
-                grid-template-columns: 200px 1fr;
-                gap: 50px;
-              }
-            }
-            @media (max-width: 989px){
-              .wrapper__twogrid {
-                grid-template-columns: 1fr;
-                gap: 100px;
-              }
-              .wrapper__twogrid .maincontent {
-                order: 1;
-              }
-              .wrapper__twogrid .sidebar {
-                order: 2;
-              }
-            }
-          </style>
-      {% else %}
-        {{ content_for_layout }}
-      {% endif %}
-      </div>
+      {{ content_for_layout }}
     </main>
 
     {% sections 'footer-group' %}

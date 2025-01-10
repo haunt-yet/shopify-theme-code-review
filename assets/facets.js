@@ -239,7 +239,11 @@ class FacetFiltersForm extends HTMLElement {
   }
 
   static updateURLHash(searchParams) {
-    history.pushState({ searchParams }, '', `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`);
+    history.pushState(
+      { searchParams }, 
+      '', 
+      `${window.location.pathname}${searchParams && '?'.concat(searchParams)}`
+    );
   }
 
   static getSections() {

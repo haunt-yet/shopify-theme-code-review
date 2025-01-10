@@ -22,6 +22,7 @@
   <script src="{{ 'quick-order-list.js' | asset_url }}" defer="defer"></script>
 {%- endif -%}
 
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -43,6 +44,35 @@
   {% endif %}
   data-section-id="{{ section.id }}"
 >
+
+   Hello
+
+  {% if customer %}
+    <p>HHHHHHHHHHHHHHHHH {{ customer.name }}</p>
+    {% assign tags = customer.tags | split: ',' %}
+
+    {% for tag in tags %}
+      <p>tag: {{ tag }}</p>
+    {% endfor %}
+
+{% assign polina_products = collection.products | where: 'vendor', "Hydrogen Vendor" %}
+
+Products from Polina's Potent Potions:
+
+
+    
+     {% assign tags = customer.tags | split: ',' %}
+    {% assign filtered_products = collection | where: 'tags', tags %}
+ {{ filtered_products.size }}
+    <ul id="product-list">
+      {% for product in filtered_products %}
+        <li>
+          {{ product.title }}
+        </li>
+      {% endfor %}
+    </ul>
+  {%- endif -%}
+  
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
     {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
@@ -56,17 +86,17 @@
               <div class="select">
                 {%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
                 <select
-                  name="sort_by"
-                  class="facet-filters__sort select__select caption-large"
-                  id="SortBy"
-                  aria-describedby="a11y-refresh-page-message"
+                        name="sort_by"
+                        class="facet-filters__sort select__select caption-large"
+                        id="SortBy"
+                        aria-describedby="a11y-refresh-page-message"
                 >
                   {%- for option in collection.sort_options -%}
                     <option
-                      value="{{ option.value | escape }}"
-                      {% if option.value == sort_by %}
-                        selected="selected"
-                      {% endif %}
+                            value="{{ option.value | escape }}"
+                            {% if option.value == sort_by %}
+                              selected="selected"
+                            {% endif %}
                     >
                       {{ option.name | escape }}
                     </option>
@@ -84,15 +114,15 @@
               <span id="ProductCountDesktop">
                 {%- if collection.results_count -%}
                   {{
-                    'templates.search.results_with_count'
-                    | t: terms: collection.terms, count: collection.results_count
+                  'templates.search.results_with_count'
+                  | t: terms: collection.terms, count: collection.results_count
                   }}
                 {%- elsif collection.products_count == collection.all_products_count -%}
                   {{ 'products.facets.product_count_simple' | t: count: collection.products_count }}
                 {%- else -%}
                   {{
-                    'products.facets.product_count'
-                    | t: product_count: collection.products_count, count: collection.all_products_count
+                  'products.facets.product_count'
+                  | t: product_count: collection.products_count, count: collection.all_products_count
                   }}
                 {%- endif -%}
               </span>
@@ -108,27 +138,27 @@
       <script src="{{ 'facets.js' | asset_url }}" defer="defer"></script>
       {%- if section.settings.enable_filtering or section.settings.enable_sorting -%}
         <aside
-          aria-labelledby="verticalTitle"
-          class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
-          id="main-collection-filters"
-          data-id="{{ section.id }}"
+                aria-labelledby="verticalTitle"
+                class="facets-wrapper{% unless section.settings.enable_filtering %} facets-wrapper--no-filters{% endunless %}{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+                id="main-collection-filters"
+                data-id="{{ section.id }}"
         >
           {% render 'facets',
-            results: collection,
-            enable_filtering: section.settings.enable_filtering,
-            enable_sorting: section.settings.enable_sorting,
-            filter_type: section.settings.filter_type,
-            paginate: paginate
+                  results: collection,
+                  enable_filtering: section.settings.enable_filtering,
+                  enable_sorting: section.settings.enable_sorting,
+                  filter_type: section.settings.filter_type,
+                  paginate: paginate
           %}
         </aside>
       {%- endif -%}
 
       <div
-        class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-        id="ProductGridContainer"
-        {% if settings.animations_reveal_on_scroll %}
-          data-cascade
-        {% endif %}
+              class="product-grid-container{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              id="ProductGridContainer"
+              {% if settings.animations_reveal_on_scroll %}
+                data-cascade
+              {% endif %}
       >
         {%- if collection.products.size == 0 -%}
           <div class="collection collection--empty page-width" id="product-grid" data-id="{{ section.id }}">
@@ -138,21 +168,21 @@
                 {{ 'sections.collection_template.empty' | t -}}
                 <br>
                 {{
-                  'sections.collection_template.use_fewer_filters_html'
-                  | t: link: collection.url, class: 'underlined-link link'
+                'sections.collection_template.use_fewer_filters_html'
+                | t: link: collection.url, class: 'underlined-link link'
                 }}
               </h2>
             </div>
           </div>
         {%- else -%}
           <div
-            class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
+                  class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
           >
             <div class="loading-overlay gradient"></div>
             <ul
-              id="product-grid"
-              data-id="{{ section.id }}"
-              class="
+                    id="product-grid"
+                    data-id="{{ section.id }}"
+                    class="
                 grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
                 grid--{{ section.settings.columns_desktop }}-col-desktop
                 {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
@@ -165,23 +195,23 @@
                   {%- assign lazy_load = true -%}
                 {%- endif -%}
                 <li
-                  class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-                  {% if settings.animations_reveal_on_scroll %}
-                    data-cascade
-                    style="--animation-order: {{ forloop.index }};"
-                  {% endif %}
+                        class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                        {% if settings.animations_reveal_on_scroll %}
+                          data-cascade
+                          style="--animation-order: {{ forloop.index }};"
+                        {% endif %}
                 >
                   {% render 'card-product',
-                    card_product: product,
-                    media_aspect_ratio: section.settings.image_ratio,
-                    image_shape: section.settings.image_shape,
-                    show_secondary_image: section.settings.show_secondary_image,
-                    show_vendor: section.settings.show_vendor,
-                    show_rating: section.settings.show_rating,
-                    lazy_load: lazy_load,
-                    skip_styles: skip_card_product_styles,
-                    quick_add: section.settings.quick_add,
-                    section_id: section.id
+                          card_product: product,
+                          media_aspect_ratio: section.settings.image_ratio,
+                          image_shape: section.settings.image_shape,
+                          show_secondary_image: section.settings.show_secondary_image,
+                          show_vendor: section.settings.show_vendor,
+                          show_rating: section.settings.show_rating,
+                          lazy_load: lazy_load,
+                          skip_styles: skip_card_product_styles,
+                          quick_add: section.settings.quick_add,
+                          section_id: section.id
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}

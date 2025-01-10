@@ -61,24 +61,9 @@
             name="contact[{{ 'templates.contact.form.name' | t }}]"
             value="{% if form.name %}{{ form.name }}{% elsif customer %}{{ customer.name }}{% endif %}"
             placeholder="{{ 'templates.contact.form.name' | t }}"
-            required
           >
-          <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}<span aria-hidden="true">*</span></label>
+          <label class="field__label" for="ContactForm-name">{{ 'templates.contact.form.name' | t }}</label>
         </div>
-        <!-- 法人名 -->
-         <div class="field">
-          <input
-            class="field__input"
-            autocomplete="name"
-            type="text"
-            id="ContactForm-companyname"
-            name="contact[法人名]"
-            value=""
-            placeholder="法人名"
-          >
-          <label class="field__label" for="ContactForm-name">法人名</label>
-        </div>
-        <!-- ./法人名 -->
         <div class="field field--with-error">
           <input
             autocomplete="email"
@@ -95,7 +80,6 @@
               aria-describedby="ContactForm-email-error"
             {% endif %}
             placeholder="{{ 'templates.contact.form.email' | t }}"
-            required
           >
           <label class="field__label" for="ContactForm-email">
             {{- 'templates.contact.form.email' | t }}
@@ -135,12 +119,11 @@
           class="text-area field__input"
           name="contact[{{ 'templates.contact.form.comment' | t }}]"
           placeholder="{{ 'templates.contact.form.comment' | t }}"
-          required
         >
           {{- form.body -}}
         </textarea>
         <label class="form__label field__label" for="ContactForm-body">
-          {{- 'templates.contact.form.comment' | t -}}<span aria-hidden="true">*</span>
+          {{- 'templates.contact.form.comment' | t -}}
         </label>
       </div>
       <div class="contact__button">

@@ -98,4 +98,45 @@
 }
 {% endschema %}
 
-<script src="{{ 'product-options.js' | asset_url }}" defer="defer"></script>
+<script>
+
+   function addHiddenExtraFeeInForm() {
+
+     const productInfoContainer = document.querySelector('.product__info-container');
+      const sectionId = productInfoContainer.querySelector('input[name="section-id"]').value;
+      console.log('sectionId', sectionId);
+
+     const newInput = document.createElement('input');
+      newInput.class = 'field__input';
+      newInput.setAttribute('form', 'product-form-' + sectionId);
+      newInput.type = 'hidden';
+      newInput.id = 'extra-fee';
+      newInput.value = 'Option 1: 5,000円, Option 4: No price';
+      newInput.name = 'properties[Extra fee]';
+      productInfoContainer.appendChild(newInput);
+
+     const newInput2 = document.createElement('input');
+      newInput2.class = 'field__input';
+      newInput2.setAttribute('form', 'product-form-' + sectionId);
+      newInput2.type = 'hidden';
+      newInput2.id = 'extra-fee2';
+      newInput2.value = '5,000円';
+      newInput2.name = 'properties[_hiddenPropertyName[0]]';
+      productInfoContainer.appendChild(newInput2);
+
+     const newInput3 = document.createElement('input');
+      newInput3.class = 'field__input';
+      newInput3.setAttribute('form', 'product-form-' + sectionId);
+      newInput3.type = 'hidden';
+      newInput3.id = 'extra-fee2';
+      newInput3.value = 'No price';
+      newInput3.name = 'properties[_hiddenPropertyName[1]]';
+      productInfoContainer.appendChild(newInput3);
+
+     
+   }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      addHiddenExtraFeeInForm();
+  });
+</script>

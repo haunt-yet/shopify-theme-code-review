@@ -82,7 +82,7 @@
         <section
           id="ProductInfo-{{ section.id }}"
           class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
-        >{{ section.id }}
+        >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
           {%- for block in section.blocks -%}
@@ -660,18 +660,6 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
-              {%- when 'custom_p_label' -%}{% comment %}ラベル{% endcomment %}        
-                 {% render 'custom-product-label', block: block %}
-              {%- when 'custom_p_number' -%}{% comment %}商品番号{% endcomment %}           
-                 {% render 'custom-product-pnumber' %}
-              {%- when 'custom_p_features' -%}{% comment %}特徴{% endcomment %}     
-                 {% render 'custom-product-features' %}
-              {%- when 'custom_p_shortestdelivery' -%}{% comment %}最短お届け日{% endcomment %}
-                 {% render 'custom-product-shortestdelivery' %}
-              {%- when 'custom_p_otherbtns' -%}{% comment %}他のボタン{% endcomment %}
-                 {% render 'custom-product-otherbtns' %}
-              {%- when 'custom_p_buybuttons' -%}{% comment %}購入へ進む{% endcomment %}
-                 {% render 'custom-product-buybuttons'%}
             {%- endcase -%}
           {%- endfor -%}
           <a href="{{ product.url }}" class="link product__view-details animate-arrow">
@@ -680,7 +668,7 @@
           </a>
         </section>
       </div>
-    </div>  
+    </div>
     {% render 'product-media-modal', variant_images: variant_images %}
 
     {% assign popups = section.blocks | where: 'type', 'popup' %}
@@ -733,34 +721,6 @@
       {{ product | structured_data }}
     </script>
   </div>
-
-<div style="padding:10px; background-color:#fab1a0;">
-OPTION DB TEST
-<button id="btn_option_regist">オプションを保存</button>
-<script src="{{ 'option-regist.js' | asset_url }}" defer="defer"></script>
-<p class="line-item-property__field">
-  <label>option1</label><br>
-  <input type="radio" name="properties[option1]" value="option1-1" form='product-form-{{ section.id }}'> <span>option1-1</span><br>
-  <input type="radio" name="properties[option1]" value="option1-2" form='product-form-{{ section.id }}'> <span>option1-2</span><br>
-  <input type="radio" name="properties[option1]" value="option1-3" form='product-form-{{ section.id }}'> <span>option1-3</span><br>
-</p>
-<p class="line-item-property__field">
-  <label>option2</label><br>
-  <input type="radio" name="properties[option2]" value="option2-1" form='product-form-{{ section.id }}'> <span>option2-1</span><br>
-  <input type="radio" name="properties[option2]" value="option2-2" form='product-form-{{ section.id }}'> <span>option2-2</span><br>
-  <input type="radio" name="properties[option2]" value="option2-3" form='product-form-{{ section.id }}'> <span>option2-3</span><br>
-</p>
-<p class="line-item-property__field">
-  <label>option3</label><br>
-  <input type="radio" name="properties[option3]" value="option3-1" form='product-form-{{ section.id }}'> <span>option3-1</span><br>
-  <input type="radio" name="properties[option3]" value="option3-2" form='product-form-{{ section.id }}'> <span>option3-2</span><br>
-  <input type="radio" name="properties[option3]" value="option3-3" form='product-form-{{ section.id }}'> <span>option3-3</span><br>
-</p>
-<p class="line-item-property__field">
-  <label>option4</label><br>
-  <input type="text" name="properties[option4]"  form='product-form-{{ section.id }}'>
-</div>
-
 </product-info>
 
 {% schema %}
@@ -2113,93 +2073,7 @@ OPTION DB TEST
           "info": "t:sections.main-product.blocks.icon_with_text.settings.heading.info"
         }
       ]
-    },
-    {
-      "type": "custom_p_label",
-      "name": "ラベル",
-      "settings": [
-        {
-          "type": "text",
-          "id": "p_label_1",
-          "label": "タグ①"
-        },
-        {
-          "type": "text",
-          "id": "p_label_2",
-          "label": "タグ②"
-        },
-        {
-          "type": "text",
-          "id": "p_label_3",
-          "label": "タグ③"
-        },
-        {
-          "type": "text",
-          "id": "p_label_4",
-          "label": "タグ④"
-        },
-        {
-          "type": "text",
-          "id": "p_label_5",
-          "label": "タグ⑤"
-        },
-        {
-          "type": "text",
-          "id": "p_label_6",
-          "label": "タグ⑥"
-        },
-        {
-          "type": "text",
-          "id": "p_label_7",
-          "label": "タグ⑦"
-        },
-        {
-          "type": "text",
-          "id": "p_label_8",
-          "label": "タグ⑧"
-        },
-        {
-          "type": "text",
-          "id": "p_label_9",
-          "label": "タグ⑨"
-        },
-        {
-          "type": "text",
-          "id": "p_label_10",
-          "label": "タグ⑩"
-        }
-      ]
-    },
-    {
-      "type": "custom_p_number",
-      "name": "商品番号",
-      "settings": [
-      ]
-    },
-    {
-      "type": "custom_p_features",
-      "name": "特徴",
-      "settings": [
-      ]
-    },
-    {
-      "type": "custom_p_shortestdelivery",
-      "name": "最短お届け日",
-      "settings": [
-      ]
-    },
-    {
-      "type": "custom_p_otherbtns",
-      "name": "他のボタン",
-      "settings": [
-      ]
-    },
-    {
-      "type": "custom_p_buybuttons",
-      "name": "購入へ進む",
-      "settings": [
-      ]
-    },
+    }
   ],
   "settings": [
     {
@@ -2207,6 +2081,12 @@ OPTION DB TEST
       "id": "enable_sticky_info",
       "default": true,
       "label": "t:sections.main-product.settings.enable_sticky_info.label"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:sections.all.colors.label",
+      "default": "scheme-1"
     },
     {
       "type": "header",

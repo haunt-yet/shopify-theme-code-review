@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25">
-  <g id="グループ_1545" data-name="グループ 1545" transform="translate(-260 -640)">
-    <circle id="楕円形_435" data-name="楕円形 435" cx="12.5" cy="12.5" r="12.5" transform="translate(260 640)" fill="#fff"/>
-    <path id="check-solid" d="M11.224,96.266a.825.825,0,0,1,0,1.167L4.63,104.027a.825.825,0,0,1-1.167,0l-3.3-3.3a.825.825,0,1,1,1.167-1.167l2.715,2.712,6.011-6.009a.825.825,0,0,1,1.167,0Z" transform="translate(266.805 552.353)" fill="#009100"/>
-  </g>
-</svg>
+<svg class="icon icon-success" viewBox="0 0 13 13"><path fill="#428445" stroke="#fff" stroke-width=".7" d="M6.5 12.35a5.85 5.85 0 1 0 0-11.7 5.85 5.85 0 0 0 0 11.7Z"/><path stroke="#fff" d="m5.533 8.664 3.72-3.982M4.106 6.769l2.032 1.857"/></svg>
