@@ -34,8 +34,15 @@ jobs:
             --store ${{ secrets.SHOPIFY_STORE }} \
             --password ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }} \
             --live
-          expect "No"
-          send -- "\[A"
-          send -- "\r"
+          expect {
+            "Push theme files to the live theme on checkout-study.myshopify.com?" {
+              send -- "\[A"  
+              send -- "\r"
+            }
+            "No" {
+              send -- "\[A"  
+              send -- "\r"
+            }
+          }
           expect eof
           END
