@@ -31,21 +31,12 @@ jobs:
           base: main
           flags: '--fail-level error'
 
-      - name: Process Theme Check Results
+      - name: Show Theme Check Results
         if: always()
         run: |
           if [ -f /tmp/results.json ]; then
-            echo "Theme Check Results:"
-            cat /tmp/results.json | jq -r '.[] | select(.severity == "error") | "Error in \(.path): \(.message)"'
-            
-            ERROR_COUNT=$(cat /tmp/results.json | jq '[.[] | select(.severity == "error")] | length')
-            if [ $ERROR_COUNT -gt 0 ]; then
-              echo "Found $ERROR_COUNT errors in theme check"
-              exit 1
-            else
-              echo "No errors found in theme check"
-            fi
+            echo "Full Theme Check Results:"
+            cat /tmp/results.json | jq '.'
           else
             echo "No results file found - no theme files were likely checked"
-            exit 0
           fi 
