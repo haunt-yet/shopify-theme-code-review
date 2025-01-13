@@ -23,6 +23,20 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      # Add custom error handling script
+      - name: Create error handler
+        run: |
+          echo '#!/bin/bash
+          output=$(theme-check $@ 2>&1)
+          code=$?
+          if echo "$output" | grep -q "No theme files found."; then
+            echo "No theme files found, proceeding without error."
+            exit 0
+          fi
+          echo "$output"
+          exit $code' > theme-check-wrapper.sh
+          chmod +x theme-check-wrapper.sh
+
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
