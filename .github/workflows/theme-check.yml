@@ -6,29 +6,42 @@ on:
     branches:
       - main
 
-permissions:
-  contents: read
-  pull-requests: write
-  checks: write
-  statuses: write
-
 jobs:
   theme-check:
     name: Theme Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      checks: write
+      pull-requests: write
+      statuses: write
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Debug Token
+        run: |
+          if [ ! -z "${{ github.token }}" ]; then
+            echo "Token is present"
+          else
+            echo "Token is missing"
+          fi
+
+      - name: Debug Context
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "PR number: ${{ github.event.pull_request.number }}"
+          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Head SHA: ${{ github.sha }}"
+
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--fail-level error'
 
       - name: Show Theme Check Results
         if: always()
@@ -36,6 +49,9 @@ jobs:
           if [ -f /tmp/results.json ]; then
             echo "Full Theme Check Results:"
             cat /tmp/results.json | jq '.'
+            
+            echo "Number of issues found:"
+            cat /tmp/results.json | jq '. | length'
           else
             echo "No results file found - no theme files were likely checked"
           fi
