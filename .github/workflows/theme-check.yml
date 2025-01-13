@@ -19,10 +19,29 @@ jobs:
       statuses: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.liquid$' || true)
+          echo "files=${CHANGED_FILES}" >> $GITHUB_OUTPUT
+
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
-          token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--fail-level error'
+          flags: '--fail-level error --list-files ${{ steps.changed-files.outputs.files }}'
+
+      - name: Show Theme Check Results
+        if: always()
+        run: |
+          if [ -f /tmp/results.json ]; then
+            echo "Full Theme Check Results:"
+            cat /tmp/results.json | jq '.'
+          else
+            echo "No results file found - no theme files were likely checked"
+          fi
