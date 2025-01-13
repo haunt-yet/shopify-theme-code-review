@@ -31,7 +31,6 @@ jobs:
           token: ${{ github.token }}
           base: main
           flags: '--fail-level error'
-        continue-on-error: true
 
       - name: Comment PR with Results
         if: always()
