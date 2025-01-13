@@ -21,16 +21,23 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      # Từ issue #28: Check changed files trước
+      # Fetch đầy đủ
+      - name: Fetch all history
+        run: |
+          git fetch --prune
+          git fetch origin main
+          git fetch origin ${{ github.head_ref }}
+
+      # Lấy changed files
       - name: Get changed files
         id: changed-files
         run: |
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -E '\.liquid$|\.js$|\.css$|\.scss$|\.json$' || true)
+          echo "Checking changes between ${{ github.event.pull_request.base.sha }} and ${{ github.event.pull_request.head.sha }}"
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.liquid$|\.js$|\.css$|\.scss$|\.json$' || true)
           echo "Changed theme files:"
           echo "$CHANGED_FILES"
           echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
-      # Từ issue #37: Sử dụng version cụ thể
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         env:
@@ -40,7 +47,6 @@ jobs:
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
 
-      # Từ issue #48: Tự xử lý annotations
       - name: Process Results
         if: always()
         run: |
