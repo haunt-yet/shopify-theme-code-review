@@ -21,40 +21,34 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      # Fetch thêm thông tin
       - name: Fetch Git History
         run: |
           git fetch origin ${{ github.event.pull_request.base.sha }}
           git fetch origin ${{ github.sha }}
 
-      # Debug file diff
-      - name: Debug File Diff
-        run: |
-          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Head SHA: ${{ github.sha }}"
-          echo "Changed files:"
-          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
-
       - name: Theme Check
-        uses: Shopify/theme-check-action@v2.1.2
+        id: theme-check
+        uses: shopify/theme-check-action@v2
+        env:
+          DEBUG: 'theme-check:*'  # Enable debug logging
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--output json'
 
-      - name: Show Theme Check Results
+      # Debug output sau khi chạy Theme Check
+      - name: Debug Theme Check Output
         if: always()
         run: |
-          echo "Theme Check output location:"
-          pwd
-          echo "Temporary directory contents:"
-          ls -la /tmp/
+          echo "Action outputs:"
+          echo "Exit code: ${{ steps.theme-check.outputs.exit_code || 'not set' }}"
+          echo "Has errors: ${{ steps.theme-check.outputs.has_errors || 'not set' }}"
           
-          if [ -f /tmp/results.json ]; then
-            echo "Results found:"
-            cat /tmp/results.json | jq '.'
-          else
-            echo "Looking for results file in current directory:"
-            find . -name "results.json"
-          fi
+          echo "Looking for results in different locations:"
+          find . -name "results.json" -type f
+          find /tmp -name "results.json" -type f
+          
+          echo "GitHub context:"
+          echo "PR number: ${{ github.event.pull_request.number }}"
+          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Head SHA: ${{ github.sha }}"
