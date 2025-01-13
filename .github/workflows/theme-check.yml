@@ -41,14 +41,20 @@ jobs:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
+          flags: '--output json'
 
       - name: Show Theme Check Results
         if: always()
         run: |
+          echo "Theme Check output location:"
+          pwd
+          echo "Temporary directory contents:"
+          ls -la /tmp/
+          
           if [ -f /tmp/results.json ]; then
             echo "Results found:"
             cat /tmp/results.json | jq '.'
           else
-            echo "No results file found"
-            ls -la /tmp/
+            echo "Looking for results file in current directory:"
+            find . -name "results.json"
           fi
