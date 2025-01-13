@@ -27,15 +27,5 @@ jobs:
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
-          token: ${{ github.token }}
+          base: main
           flags: '--fail-level error'
-
-      - name: Show Theme Check Results
-        if: always()
-        run: |
-          if [ -f /tmp/results.json ]; then
-            echo "Full Theme Check Results:"
-            cat /tmp/results.json | jq '.'
-          else
-            echo "No results file found - no theme files were likely checked"
-          fi 
