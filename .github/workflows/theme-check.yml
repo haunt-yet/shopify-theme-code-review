@@ -24,9 +24,38 @@ jobs:
           fetch-depth: 0
 
       - name: Theme Check
+        id: theme-check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: main
-          flags: '--fail-level error' 
+          flags: '--fail-level error --output json'
+
+      - name: Print Theme Check Results
+        run: |
+          echo "Theme Check Output:"
+          shopify theme check --output json
+
+      - name: Comment PR on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `## Theme Check Results ❌
+
+            Theme check found some issues that need to be addressed:
+            
+            \`\`\`
+            ${process.env.THEME_CHECK_OUTPUT || 'Details in the Checks tab of the PR'}
+            \`\`\`
+
+            Please check and fix the issues before merging.`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            }) 
