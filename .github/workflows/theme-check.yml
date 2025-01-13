@@ -6,35 +6,29 @@ on:
     branches:
       - main
 
-permissions: write-all  
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+  statuses: write
 
 jobs:
   theme-check:
     name: Theme Check
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
-      checks: write 
-      statuses: write
     steps:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      - name: Get changed files
-        id: changed-files
-        run: |
-          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep '\.liquid$' || true)
-          echo "files=${CHANGED_FILES}" >> $GITHUB_OUTPUT
-
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
+          token: ${{ secrets.GITHUB_TOKEN }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--fail-level error --files ${{ steps.changed-files.outputs.files }}'
+          flags: '--fail-level error'
 
       - name: Show Theme Check Results
         if: always()
