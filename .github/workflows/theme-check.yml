@@ -23,24 +23,29 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      # Add custom error handling script
-      - name: Create error handler
-        run: |
-          echo '#!/bin/bash
-          output=$(theme-check $@ 2>&1)
-          code=$?
-          if echo "$output" | grep -q "No theme files found."; then
-            echo "No theme files found, proceeding without error."
-            exit 0
-          fi
-          echo "$output"
-          exit $code' > theme-check-wrapper.sh
-          chmod +x theme-check-wrapper.sh
-
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: main
-          flags: '--fail-level error --print' 
+          flags: '--fail-level error'
+
+      - name: Process Theme Check Results
+        if: always()
+        run: |
+          if [ -f /tmp/results.json ]; then
+            echo "Theme Check Results:"
+            cat /tmp/results.json | jq -r '.[] | select(.severity == "error") | "Error in \(.path): \(.message)"'
+            
+            ERROR_COUNT=$(cat /tmp/results.json | jq '[.[] | select(.severity == "error")] | length')
+            if [ $ERROR_COUNT -gt 0 ]; then
+              echo "Found $ERROR_COUNT errors in theme check"
+              exit 1
+            else
+              echo "No errors found in theme check"
+            fi
+          else
+            echo "No results file found - no theme files were likely checked"
+            exit 0
+          fi 
