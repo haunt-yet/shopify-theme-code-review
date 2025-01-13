@@ -36,7 +36,7 @@ jobs:
           git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
 
       - name: Theme Check
-        uses: shopify/theme-check-action@v2
+        uses: Shopify/theme-check-action@v2.1.2
         with:
           theme_root: '.'
           token: ${{ github.token }}
