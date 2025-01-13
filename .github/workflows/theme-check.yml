@@ -1,0 +1,28 @@
+name: Theme Check
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+
+jobs:
+  theme-check:
+    name: Theme Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Theme Check
+        uses: shopify/theme-check-action@v2
+        with:
+          theme_root: '.'
+          token: ${{ github.token }}
+          base: main
+          flags: '--fail-level error' 
