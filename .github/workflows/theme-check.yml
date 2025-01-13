@@ -19,10 +19,6 @@ jobs:
       statuses: write
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref }}
-          fetch-depth: 0
-
       - name: Theme Check
         uses: shopify/theme-check-action@v2
         with:
