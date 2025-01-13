@@ -30,12 +30,16 @@ jobs:
           theme_root: '.'
           token: ${{ github.token }}
           base: main
-          flags: '--fail-level error --output json'
+          flags: '--fail-level error'
 
-      - name: Print Theme Check Results
+      - name: Run Theme Check with JSON output
+        if: always()
+        id: theme-check-json
         run: |
-          echo "Theme Check Output:"
-          shopify theme check --output json
+          OUTPUT=$(shopify theme check --output json)
+          echo "THEME_CHECK_OUTPUT<<EOF" >> $GITHUB_ENV
+          echo "$OUTPUT" >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
 
       - name: Comment PR on failure
         if: failure()
