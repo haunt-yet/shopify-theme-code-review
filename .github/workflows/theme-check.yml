@@ -21,34 +21,49 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      - name: Fetch Git History
+      # Từ issue #28: Check changed files trước
+      - name: Get changed files
+        id: changed-files
         run: |
-          git fetch origin ${{ github.event.pull_request.base.sha }}
-          git fetch origin ${{ github.sha }}
+          CHANGED_FILES=$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep -E '\.liquid$|\.js$|\.css$|\.scss$|\.json$' || true)
+          echo "Changed theme files:"
+          echo "$CHANGED_FILES"
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
 
+      # Từ issue #37: Sử dụng version cụ thể
       - name: Theme Check
-        id: theme-check
         uses: shopify/theme-check-action@v2
         env:
-          DEBUG: 'theme-check:*'  # Enable debug logging
+          THEME_CHECK_OPTIONS: "--fail-level error"
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
+          version: "1.16.1"  # Sử dụng version cụ thể
 
-      # Debug output sau khi chạy Theme Check
-      - name: Debug Theme Check Output
+      # Từ issue #48: Tự xử lý annotations
+      - name: Process Results
         if: always()
         run: |
-          echo "Action outputs:"
-          echo "Exit code: ${{ steps.theme-check.outputs.exit_code || 'not set' }}"
-          echo "Has errors: ${{ steps.theme-check.outputs.has_errors || 'not set' }}"
-          
-          echo "Looking for results in different locations:"
-          find . -name "results.json" -type f
-          find /tmp -name "results.json" -type f
-          
-          echo "GitHub context:"
-          echo "PR number: ${{ github.event.pull_request.number }}"
-          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Head SHA: ${{ github.sha }}"
+          if [ -f /tmp/results.json ]; then
+            echo "Processing theme check results..."
+            
+            # Convert results to GitHub annotations format
+            jq -r '.[] | select(.severity == "error") | 
+              "::error file=\(.path),line=\(.start_row)::[\(.check_name)] \(.message)"' /tmp/results.json || true
+            
+            # Check for errors
+            ERROR_COUNT=$(jq '[.[] | select(.severity == "error")] | length' /tmp/results.json)
+            if [ "$ERROR_COUNT" -gt 0 ]; then
+              echo "Found $ERROR_COUNT errors"
+              exit 1
+            fi
+          else
+            echo "No results file found - checking if any theme files were changed"
+            if [ -n "${{ steps.changed-files.outputs.files }}" ]; then
+              echo "Theme files were changed but no results found"
+              exit 1
+            else
+              echo "No theme files were changed"
+            fi
+          fi
