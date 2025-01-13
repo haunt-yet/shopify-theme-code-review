@@ -21,21 +21,22 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      # Fetch đầy đủ history
+      # Fetch thêm thông tin
       - name: Fetch Git History
         run: |
-          git fetch --prune --unshallow
           git fetch origin ${{ github.event.pull_request.base.sha }}
           git fetch origin ${{ github.sha }}
 
       # Debug file diff
       - name: Debug File Diff
         run: |
+          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
+          echo "Head SHA: ${{ github.sha }}"
           echo "Changed files:"
           git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
 
       - name: Theme Check
-        uses: Shopify/theme-check-action@v2.1.2
+        uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
           token: ${{ github.token }}
