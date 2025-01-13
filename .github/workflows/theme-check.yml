@@ -21,33 +21,29 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      # Fetch đầy đủ history
+      - name: Fetch Git History
+        run: |
+          git fetch --prune --unshallow
+          git fetch origin ${{ github.event.pull_request.base.sha }}
+          git fetch origin ${{ github.sha }}
+
       # Debug file diff
       - name: Debug File Diff
         run: |
           echo "Changed files:"
           git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
 
-      # Debug theme check config
-      - name: Debug Theme Check Config
-        run: |
-          echo "Looking for .theme-check.yml"
-          find . -name ".theme-check.yml" || echo "No config file found"
-
-      - name: Run Theme Check on Shopify theme
+      - name: Theme Check
         uses: Shopify/theme-check-action@v2.1.2
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--output json'  # Thêm flag để force JSON output
 
       - name: Show Theme Check Results
         if: always()
         run: |
-          echo "Theme Check CLI version:"
-          theme check --version || echo "Theme check not found"
-          
-          echo "Checking results file:"
           if [ -f /tmp/results.json ]; then
             echo "Results found:"
             cat /tmp/results.json | jq '.'
