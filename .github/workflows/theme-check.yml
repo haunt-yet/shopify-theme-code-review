@@ -27,8 +27,6 @@ jobs:
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
-          token: ${{ github.token }}
-          base: main
           flags: '--fail-level error'
 
       - name: Show Theme Check Results
