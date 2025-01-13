@@ -39,7 +39,6 @@ jobs:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          version: "1.16.1"  # Sử dụng version cụ thể
 
       # Từ issue #48: Tự xử lý annotations
       - name: Process Results
