@@ -6,7 +6,7 @@ on:
     branches:
       - main
 
-permissions: write-all
+permissions: write-all  
 
 jobs:
   theme-check:
@@ -15,7 +15,7 @@ jobs:
     permissions:
       contents: read
       pull-requests: write
-      checks: write
+      checks: write 
       statuses: write
     steps:
       - uses: actions/checkout@v4
@@ -24,39 +24,9 @@ jobs:
           fetch-depth: 0
 
       - name: Theme Check
-        id: theme-check
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: main
-          flags: '--fail-level error'
-
-      - name: Comment PR with Results
-        if: always()
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const status = '${{ steps.theme-check.outcome }}';
-            const checkOutput = `${{ steps.theme-check.outputs.check_output }}`;
-            const emoji = status === 'success' ? '✅' : '❌';
-            
-            const output = `## Theme Check Results ${emoji}
-            
-            ${status === 'success' 
-              ? '✨ Great! No issues found.' 
-              : `### List of issues to fix:
-              
-            \`\`\`
-            ${checkOutput}
-            \`\`\`
-            
-            Please fix these issues before merging.`}`;
-            
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
-            }) 
+          flags: '--fail-level error' 
