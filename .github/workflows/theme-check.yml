@@ -21,37 +21,37 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
-      - name: Debug Token
+      # Debug file diff
+      - name: Debug File Diff
         run: |
-          if [ ! -z "${{ github.token }}" ]; then
-            echo "Token is present"
-          else
-            echo "Token is missing"
-          fi
+          echo "Changed files:"
+          git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }}
 
-      - name: Debug Context
+      # Debug theme check config
+      - name: Debug Theme Check Config
         run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "PR number: ${{ github.event.pull_request.number }}"
-          echo "Base SHA: ${{ github.event.pull_request.base.sha }}"
-          echo "Head SHA: ${{ github.sha }}"
+          echo "Looking for .theme-check.yml"
+          find . -name ".theme-check.yml" || echo "No config file found"
 
-      - name: Theme Check
-        uses: shopify/theme-check-action@v2
+      - name: Run Theme Check on Shopify theme
+        uses: Shopify/theme-check-action@v2.1.2
         with:
           theme_root: '.'
           token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
+          flags: '--output json'  # Thêm flag để force JSON output
 
       - name: Show Theme Check Results
         if: always()
         run: |
+          echo "Theme Check CLI version:"
+          theme check --version || echo "Theme check not found"
+          
+          echo "Checking results file:"
           if [ -f /tmp/results.json ]; then
-            echo "Full Theme Check Results:"
+            echo "Results found:"
             cat /tmp/results.json | jq '.'
-            
-            echo "Number of issues found:"
-            cat /tmp/results.json | jq '. | length'
           else
-            echo "No results file found - no theme files were likely checked"
+            echo "No results file found"
+            ls -la /tmp/
           fi
