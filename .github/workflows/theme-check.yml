@@ -27,5 +27,6 @@ jobs:
         uses: shopify/theme-check-action@v2
         with:
           theme_root: '.'
+          token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
           flags: '--fail-level error'
