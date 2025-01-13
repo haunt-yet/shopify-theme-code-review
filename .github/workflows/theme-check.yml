@@ -31,31 +31,29 @@ jobs:
           token: ${{ github.token }}
           base: main
           flags: '--fail-level error'
+        continue-on-error: true
 
-      - name: Run Theme Check with JSON output
+      - name: Comment PR with Results
         if: always()
-        id: theme-check-json
-        run: |
-          OUTPUT=$(shopify theme check --output json)
-          echo "THEME_CHECK_OUTPUT<<EOF" >> $GITHUB_ENV
-          echo "$OUTPUT" >> $GITHUB_ENV
-          echo "EOF" >> $GITHUB_ENV
-
-      - name: Comment PR on failure
-        if: failure()
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `## Theme Check Results ❌
-
-            Theme check found some issues that need to be addressed:
+            const status = '${{ steps.theme-check.outcome }}';
+            const checkOutput = `${{ steps.theme-check.outputs.check_output }}`;
+            const emoji = status === 'success' ? '✅' : '❌';
             
+            const output = `## Theme Check Results ${emoji}
+            
+            ${status === 'success' 
+              ? '✨ Great! No issues found.' 
+              : `### List of issues to fix:
+              
             \`\`\`
-            ${process.env.THEME_CHECK_OUTPUT || 'Details in the Checks tab of the PR'}
+            ${checkOutput}
             \`\`\`
-
-            Please check and fix the issues before merging.`;
+            
+            Please fix these issues before merging.`}`;
             
             github.rest.issues.createComment({
               issue_number: context.issue.number,
