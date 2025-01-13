@@ -34,7 +34,7 @@ jobs:
         with:
           theme_root: '.'
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--fail-level error --list-files ${{ steps.changed-files.outputs.files }}'
+          flags: '--fail-level error --files ${{ steps.changed-files.outputs.files }}'
 
       - name: Show Theme Check Results
         if: always()
