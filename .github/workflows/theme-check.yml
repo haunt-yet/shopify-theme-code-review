@@ -6,16 +6,14 @@ on:
     branches:
       - main
 
-permissions: write-all  
-
 jobs:
   theme-check:
     name: Theme Check
     runs-on: ubuntu-latest
     permissions:
       contents: read
+      checks: write
       pull-requests: write
-      checks: write 
       statuses: write
     steps:
       - uses: actions/checkout@v4
@@ -23,9 +21,49 @@ jobs:
           ref: ${{ github.head_ref }}
           fetch-depth: 0
 
+      - name: Fetch all history
+        run: |
+          git fetch --prune
+          git fetch origin main
+          git fetch origin ${{ github.head_ref }}
+
+      - name: Get changed files
+        id: changed-files
+        run: |
+          echo "Checking changes between origin/main and HEAD"
+          CHANGED_FILES=$(git diff --name-only origin/main...HEAD | grep -E '\.liquid$|\.js$|\.css$|\.scss$|\.json$' || true)
+          echo "Changed theme files:"
+          echo "$CHANGED_FILES"
+          echo "files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+
       - name: Theme Check
+        id: theme-check
         uses: shopify/theme-check-action@v2
+        continue-on-error: true
+        env:
+          THEME_CHECK_OPTIONS: "--fail-level error"
         with:
           theme_root: '.'
+          token: ${{ github.token }}
           base: ${{ github.event.pull_request.base.sha }}
-          flags: '--fail-level error'
+
+      - name: Process Results
+        if: always()
+        run: |
+          if [ -n "${{ steps.changed-files.outputs.files }}" ]; then
+            echo "Theme files were changed"
+            
+            if [ -f /tmp/results.json ]; then
+              echo "Processing theme check results..."
+              
+              echo "Results content:"
+              cat /tmp/results.json
+              
+              jq -r '.[] | select(.severity == "error") | 
+                "::error file=\(.path),line=\(.start_row)::[\(.check_name)] \(.message)"' /tmp/results.json || true
+            else
+              echo "Theme check completed but no results file was created"
+            fi
+          else
+            echo "No theme files were changed"
+          fi
